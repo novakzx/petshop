@@ -1,72 +1,76 @@
 # 🐾 PataChic — Banho, Tosa & Boutique Pet
 
-Site institucional + agendamento online de tosa/banho + loja de produtos para pets.
-Projeto estático (HTML + CSS + JavaScript), sem build e sem dependências de servidor.
+Site + **backend de verdade**: agendamento online de tosa/banho e loja de produtos para pets,
+com API REST em Flask e banco SQLite. Visual creme + verde-escuro + dourado.
 
 ## ✨ Funcionalidades
 
-- **Agendamento online de tosa e banho** — escolha de serviço, porte do pet, profissional, data e horário com agenda simulada, estimativa de preço em tempo real e confirmação com protocolo (+ botão de confirmação via WhatsApp).
-- **Meus agendamentos** — lista e cancela horários (salvos no navegador via `localStorage`).
-- **Boutique pet** — 11 produtos com busca, filtros por categoria, ordenação e avaliações.
-- **Carrinho + checkout** — gaveta lateral, cupom `BEMVINDO10` (10% OFF), barra de frete grátis (acima de R$ 149) e finalização com número de pedido.
-- **Clube PataChic** — planos de assinatura com CTA direto para o WhatsApp.
-- **Depoimentos, FAQ, galeria de clientes, mapa e formulário de contato.**
+**Loja (`/`)**
+- **Agendamento online** — serviços, porte, profissional, data e horários vindos da API, com trava real de horário duplicado e protocolo.
+- **Meus agendamentos** — consulta e cancela pelo WhatsApp (dados no banco).
+- **Boutique** — busca, filtros por categoria, ordenação, carrossel de mais vendidos.
+- **Carrinho + checkout** — cupons validados no servidor (`PATACHIC30` = 30% OFF, `BEMVINDO10` = 10% OFF), frete grátis acima de R$ 149, pedido gravado no banco.
+- Banner de oferta com copiar-cupom, FAQ, newsletter e avisos (toasts).
 
-## 🎨 Identidade da marca
+**Área do lojista (`/admin`)**
+- Resumo (agendamentos ativos, pedidos, receita, inscritos), listas de agendamentos/pedidos/contatos/newsletter, cancela horários e atualiza status do pedido. Acesso com token (`ADMIN_TOKEN`, padrão `patachic-admin-123`).
+
+## 🧩 API REST
+
+| Método | Rota | Descrição |
+|---|---|---|
+| GET | `/api/status` | Saúde da API + contagens |
+| GET | `/api/servicos` · `/api/produtos` | Catálogos |
+| GET | `/api/disponibilidade?data=AAAA-MM-DD` | Horários livres do dia |
+| POST | `/api/agendamentos` | Cria agendamento (409 se o horário ocupar) |
+| GET | `/api/agendamentos?telefone=` | Meus agendamentos ativos |
+| DELETE | `/api/agendamentos/:protocolo` | Cancela agendamento |
+| POST | `/api/cupons/validar` | Valida cupom |
+| POST | `/api/pedidos` | Cria pedido (preços recalculados no servidor) |
+| GET | `/api/pedidos/:numero` | Detalhe do pedido |
+| POST | `/api/contato` · `/api/newsletter` | Mensagens e inscrições |
+| GET/PATCH | `/api/admin/*` | Resumo, listas e status (header `X-Admin-Token`) |
+
+## 🎨 Identidade
 
 | Elemento | Valor |
 |---|---|
-| Nome | **PataChic** |
-| Slogan | *“O spa boutique do seu pet”* |
-| Logotipo | `assets/logo.svg` (patinha + brilho, também usado como favicon) |
-| Tipografia | **Baloo 2** (títulos) + **Nunito** (texto) |
-
-### Paleta de cores
-
-| Cor | Hex | Uso |
-|---|---|---|
-| Caramelo | `#F97316` | Primária, CTAs |
-| Verde Petróleo | `#0F766E` | Secundária, confiança |
-| Baunilha | `#FFFBF3` | Fundo |
-| Cacau | `#292524` | Texto |
-| Pétala | `#FB7185` | Destaques, ofertas |
-| Sol | `#FBBF24` | Estrelas, selos |
+| Nome | **PataChic** — *“O spa boutique do seu pet”* |
+| Logotipo | `assets/logo.svg` (patinha + dourado, também favicon) |
+| Tipografia | **Archivo** (títulos) + **Fraunces itálico** (destaques) + **Nunito** (texto) |
+| Paleta | Creme `#F4EDD8` · Verde `#14532D` · Verde-escuro `#0B3A1F` · Dourado `#C99B3F` · Tinta `#243024` |
 
 ## ▶️ Como rodar
 
-Qualquer servidor estático funciona. Exemplos:
-
 ```bash
-# Python
-python3 -m http.server 8080
-
-# Node
-npx serve .
+pip install -r backend/requirements.txt
+python3 backend/app.py
+# abra http://localhost:8080  (loja)  e  http://localhost:8080/admin  (lojista)
 ```
 
-Depois abra `http://localhost:8080`.
-
-> 💡 Dica: para publicar grátis, ative o **GitHub Pages** apontando para a branch principal.
+O banco SQLite é criado em `data/patachic.db` no primeiro avvio, já com serviços e produtos.
+Sem o backend, a vitrine mostra um aviso e as compras/agendamentos ficam indisponíveis.
 
 ## 🗂️ Estrutura
 
 ```
-├── index.html          # página única com todas as seções
-├── css/styles.css      # estilos + paleta + animações
-├── js/app.js           # dados e lógica (serviços, agenda, loja, carrinho)
-└── assets/
-    ├── logo.svg        # logotipo oficial
-    ├── site/           # fotos do salão e da galeria
-    └── produtos/       # fotos dos produtos da boutique
+├── index.html · admin.html   # loja + área do lojista
+├── css/styles.css            # tema creme/verde/dourado
+├── js/app.js · js/admin.js   # front-end (fetch na API)
+├── backend/
+│   ├── app.py                # Flask + SQLite (páginas + API REST)
+│   └── requirements.txt
+├── assets/                   # logo.svg, fotos do site e dos produtos
+└── data/                     # banco SQLite (criado em runtime, fora do git)
 ```
 
 ## 🔧 Personalização rápida
 
-- **WhatsApp/telefone/endereço:** ajuste a constante `WHATSAPP` em `js/app.js` e os textos em `index.html`.
-- **Serviços e preços:** edite o array `SERVICOS` em `js/app.js`.
-- **Produtos:** edite o array `PRODUTOS` em `js/app.js` (campos `nome`, `preco`, `img`, `cat`…).
-- **Frete e cupom:** constantes `FRETE_GRATIS_MINIMO`, `VALOR_FRETE` e `CUPOM_BEMVINDO` em `js/app.js`.
+- **WhatsApp/telefone/endereço:** constante `WHATSAPP` em `js/app.js` + textos em `index.html`.
+- **Serviços/produtos:** seed em `backend/app.py` (`SERVICOS_SEED`, `PRODUTOS_SEED`) — apague `data/patachic.db` para recriar.
+- **Cupons/frete:** `CUPONS`, `FRETE_GRATIS_MINIMO`, `VALOR_FRETE` em `backend/app.py`.
+- **Token do lojista:** variável de ambiente `ADMIN_TOKEN`.
 
-## 📸 Créditos das imagens
+## 📸 Imagens
 
-Fotos de salão e pets: banco gratuito **Pexels** (+ parceiros). Fotos de produtos de higiene, rações e petiscos: geradas para a marca. Todas otimizadas para web e armazenadas localmente em `assets/`.
+Fotos de produtos reais + fotos geradas para a marca (herói, corgis, oferta), todas locais em `assets/`.

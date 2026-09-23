@@ -1,17 +1,14 @@
 /* ============================================================
-   PataChic — Banho, Tosa & Boutique Pet
-   Lógica do site: serviços, agendamento, loja, carrinho,
-   depoimentos, FAQ e animações.
+   PataChic — front-end (consome a API Flask em /api)
    ============================================================ */
 
 "use strict";
 
-/* ---------------- Dados ---------------- */
+/* ---------------- Config ---------------- */
 
 const WHATSAPP = "5511987654321";
 const FRETE_GRATIS_MINIMO = 149;
 const VALOR_FRETE = 14.9;
-const CUPOM_BEMVINDO = "BEMVINDO10";
 
 const PROFISSIONAIS = [
   { id: "qualquer", nome: "Sem preferência (primeiro horário livre)" },
@@ -20,84 +17,8 @@ const PROFISSIONAIS = [
   { id: "pri", nome: "Patrícia Lima — Banho & Spa" },
 ];
 
-const SERVICOS = [
-  {
-    id: "banho", nome: "Banho Completo", preco: 59.9, duracao: "60 min",
-    porPorte: true, icone: "banho",
-    desc: "Banho com shampoo premium, condicionador, secagem, perfume e laço ou gravata.",
-    cor: "#0284c7",
-  },
-  {
-    id: "tosa-hig", nome: "Tosa Higiênica", preco: 45, duracao: "40 min",
-    porPorte: false, icone: "tesoura",
-    desc: "Aparos em patas, barriga, bumbum e ouvidos. Ideal entre as tosas completas.",
-    cor: "#0f766e",
-  },
-  {
-    id: "tosa-tesoura", nome: "Tosa na Tesoura", preco: 89.9, duracao: "90 min",
-    porPorte: true, icone: "tesoura", destaque: "Mais procurada",
-    desc: "Acabamento artesanal na tesoura, com banho incluso e finalização de boutique.",
-    cor: "#ea580c",
-  },
-  {
-    id: "tosa-maquina", nome: "Tosa na Máquina", preco: 79.9, duracao: "75 min",
-    porPorte: true, icone: "maquina",
-    desc: "Pelagem uniforme e fresquinha, com banho incluso. Perfeita para o verão.",
-    cor: "#7c3aed",
-  },
-  {
-    id: "spa", nome: "Spa & Hidratação", preco: 69.9, duracao: "50 min",
-    porPorte: true, icone: "spa",
-    desc: "Hidratação profunda, massagem relaxante, banho de brilho e aromaterapia.",
-    cor: "#e11d48",
-  },
-  {
-    id: "unhas", nome: "Corte de Unhas", preco: 25, duracao: "20 min",
-    porPorte: false, icone: "pata",
-    desc: "Corte seguro com lixamento, sem estresse e com petisco de recompensa.",
-    cor: "#d97706",
-  },
-  {
-    id: "dentes", nome: "Escovação Dentária", preco: 35, duracao: "25 min",
-    porPorte: false, icone: "dente",
-    desc: "Higiene bucal com produtos veterinários e hálito fresquinho na hora.",
-    cor: "#059669",
-  },
-  {
-    id: "daycare", nome: "Day Care (diária)", preco: 49.9, duracao: "o dia todo",
-    porPorte: false, icone: "sol",
-    desc: "Um dia inteiro de brincadeiras, socialização e soneca monitorada.",
-    cor: "#db2777",
-  },
-];
-
 const MULT_PORTE = { P: 1, M: 1.25, G: 1.5 };
-const ROTULO_PORTE = { P: "Pequeno (até 10 kg)", M: "Médio (10–25 kg)", G: "Grande (25 kg+)" };
-
-const PRODUTOS = [
-  { id: "racao-adulto", nome: "Ração Premium Frango & Vegetais — 10 kg", cat: "Alimentação", preco: 189.9, antigo: 219.9, selo: "oferta", seloTexto: "-14%", rating: 4.9, avaliacoes: 312, img: "assets/produtos/racao-adulto.jpg", desc: "Nutrição completa com frango, arroz e vegetais para cães adultos." },
-  { id: "racao-filhote", nome: "Ração Filhotes Frango & Leite — 3 kg", cat: "Alimentação", preco: 89.9, antigo: null, selo: "top", seloTexto: "Mais vendido", rating: 4.8, avaliacoes: 208, img: "assets/produtos/racao-filhote.jpg", desc: "Grãos pequenos e DHA para o crescimento saudável do seu filhote." },
-  { id: "biscoitos", nome: "Biscoito Ossinho Sortido — 500 g", cat: "Alimentação", preco: 24.9, antigo: null, selo: null, seloTexto: "", rating: 4.9, avaliacoes: 441, img: "assets/produtos/biscoitos.jpg", desc: "Crocantes assados, perfeitos para adestrar e recompensar." },
-  { id: "kit-cordas", nome: "Kit 12 Cordas de Algodão Coloridas", cat: "Brinquedos", preco: 59.9, antigo: 79.9, selo: "oferta", seloTexto: "-25%", rating: 4.7, avaliacoes: 156, img: "assets/produtos/kit-cordas.jpg", desc: "Kit com 12 cordas para morder, puxar e gastar energia." },
-  { id: "kit-cabo", nome: "Kit Cabo de Guerra Tons Neutros — 3 peças", cat: "Brinquedos", preco: 49.9, antigo: null, selo: "novo", seloTexto: "Novo", rating: 5.0, avaliacoes: 38, img: "assets/produtos/kit-cabo.jpg", desc: "Design escandinavo em algodão trançado, resistente e lindo." },
-  { id: "cama-nuvem", nome: "Cama Nuvem Felpuda — Cinza", cat: "Conforto", preco: 149.9, antigo: null, selo: "top", seloTexto: "Mais vendido", rating: 4.9, avaliacoes: 527, img: "assets/produtos/cama-nuvem.jpg", desc: "Super macia, com borda alta que abraça e acalma o pet." },
-  { id: "colchonete", nome: "Colchonete Aconchego — Azul Petróleo", cat: "Conforto", preco: 119.9, antigo: 149.9, selo: "oferta", seloTexto: "-20%", rating: 4.8, avaliacoes: 203, img: "assets/produtos/colchonete.jpg", desc: "Espuma ortopédica com capa removível e lavável." },
-  { id: "arranhador-torre", nome: "Arranhador Torre com Plataforma", cat: "Gatos", preco: 179.9, antigo: null, selo: null, seloTexto: "", rating: 4.8, avaliacoes: 167, img: "assets/produtos/arranhador-torre.jpg", desc: "Sisal natural, base estável e mirante estofado para sonecas." },
-  { id: "arranhador-familia", nome: "Arranhador Família — 3 Andares", cat: "Gatos", preco: 249.9, antigo: 299.9, selo: "oferta", seloTexto: "-17%", rating: 4.9, avaliacoes: 98, img: "assets/produtos/arranhador-familia.jpg", desc: "Parquinho vertical em madeira para casas com vários gatos." },
-  { id: "shampoo", nome: "Shampoo Neutro PataChic — 500 ml", cat: "Higiene", preco: 34.9, antigo: null, selo: "proprio", seloTexto: "Linha própria", rating: 5.0, avaliacoes: 612, img: "assets/produtos/shampoo.jpg", desc: "O mesmo shampoo do nosso banho: pH neutro e cheirinho suave." },
-  { id: "perfume", nome: "Colônia Pet Lavanda — 120 ml", cat: "Higiene", preco: 44.9, antigo: null, selo: "novo", seloTexto: "Novo", rating: 4.9, avaliacoes: 84, img: "assets/produtos/perfume.jpg", desc: "Fragrância delicada de lavanda, segura para cães e gatos." },
-];
-
 const CATEGORIAS = ["Todos", "Alimentação", "Brinquedos", "Conforto", "Gatos", "Higiene"];
-
-const DEPOIMENTOS = [
-  { nome: "Mariana L.", pet: "Thor · Golden Retriever", texto: "O Thor volta do banho cheiroso e feliz toda vez. A equipe manda foto durante a tosa e isso me deixa super tranquila. Virei cliente fiel!", cor: "#f97316" },
-  { nome: "Carlos H.", pet: "Mel · Shih-tzu", texto: "Mel é medrosa e mesmo assim ama ir. A Camila tem uma paciência de outro mundo e a tosa fica impecável. Melhor petshop da região, sem dúvida.", cor: "#0f766e" },
-  { nome: "Fernanda P.", pet: "Simba & Nala · SRD felinos", texto: "Finalmente um lugar que entende de gatos! Meus dois voltaram calmos, sem estresse. E a lojinha é uma perdição — saí com arranhador novo.", cor: "#7c3aed" },
-  { nome: "Rafael T.", pet: "Bolt · Border Collie", texto: "Agendo pelo site em menos de um minuto e recebo tudo no WhatsApp. O day care salvou minha rotina: o Bolt chega em casa cansado e feliz.", cor: "#db2777" },
-];
-
-const HORARIOS = ["08:00", "09:30", "11:00", "13:00", "14:30", "16:00", "17:30"];
 
 const ICONES = {
   banho: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16v2a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5v-2z"/><path d="M6 12V5a2 2 0 0 1 4 0"/><path d="M8 21l-1 1M16 21l1 1M9 8c1.5 0 1.5 1.5 3 1.5S13.5 8 15 8"/></svg>',
@@ -109,29 +30,56 @@ const ICONES = {
   sol: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
 };
 
+/* Dados de contingência (se a API estiver fora do ar, a vitrine segue visível) */
+const FALLBACK_SERVICOS = [
+  { id: "banho", nome: "Banho Completo", preco: 59.9, duracao: "60 min", por_porte: 1, icone: "banho", cor: "#0284c7", descricao: "Banho premium com secagem, perfume e acabamento.", destaque: null },
+  { id: "tosa-hig", nome: "Tosa Higiênica", preco: 45, duracao: "40 min", por_porte: 0, icone: "tesoura", cor: "#0f766e", descricao: "Aparos em patas, barriga e ouvidos.", destaque: null },
+  { id: "tosa-tesoura", nome: "Tosa na Tesoura", preco: 89.9, duracao: "90 min", por_porte: 1, icone: "tesoura", cor: "#ea580c", descricao: "Acabamento artesanal com banho incluso.", destaque: "Mais procurada" },
+  { id: "tosa-maquina", nome: "Tosa na Máquina", preco: 79.9, duracao: "75 min", por_porte: 1, icone: "maquina", cor: "#7c3aed", descricao: "Pelagem uniforme com banho incluso.", destaque: null },
+  { id: "spa", nome: "Spa & Hidratação", preco: 69.9, duracao: "50 min", por_porte: 1, icone: "spa", cor: "#e11d48", descricao: "Hidratação, massagem e aromaterapia.", destaque: null },
+  { id: "unhas", nome: "Corte de Unhas", preco: 25, duracao: "20 min", por_porte: 0, icone: "pata", cor: "#d97706", descricao: "Corte seguro com lixamento.", destaque: null },
+  { id: "dentes", nome: "Escovação Dentária", preco: 35, duracao: "25 min", por_porte: 0, icone: "dente", cor: "#059669", descricao: "Higiene bucal veterinária.", destaque: null },
+  { id: "daycare", nome: "Day Care (diária)", preco: 49.9, duracao: "o dia todo", por_porte: 0, icone: "sol", cor: "#db2777", descricao: "Dia inteiro de brincadeiras monitoradas.", destaque: null },
+];
+
+let SERVICOS = [];
+let PRODUTOS = [];
+let API_OK = false;
+
+/* ---------------- API ---------------- */
+
+async function api(path, options = {}) {
+  const r = await fetch("/api" + path, {
+    headers: { "Content-Type": "application/json" },
+    ...options,
+  });
+  const dados = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(dados.erro || `HTTP ${r.status}`);
+  return dados;
+}
+const apiGet = (p) => api(p);
+const apiPost = (p, corpo) => api(p, { method: "POST", body: JSON.stringify(corpo) });
+const apiDel = (p) => api(p, { method: "DELETE" });
+
 /* ---------------- Utilidades ---------------- */
 
 const $ = (sel, ctx = document) => ctx.querySelector(sel);
 const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 
 const dinheiro = (v) =>
-  v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-
-const gerarProtocolo = (prefixo) =>
-  prefixo + "-" + Math.random().toString(36).slice(2, 7).toUpperCase();
+  Number(v).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
 function toast(msg, tipo = "ok") {
   const wrap = $("#toastWrap");
   if (!wrap) return;
   const el = document.createElement("div");
   el.className = `toast toast-${tipo}`;
+  const cor = tipo === "ok" ? "#4ade80" : tipo === "erro" ? "#f87171" : "#E4C87F";
   const icone =
     tipo === "ok"
-      ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>'
-      : tipo === "erro"
-      ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fb7185" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>'
-      : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>';
-  el.innerHTML = `<span style="flex-shrink:0;margin-top:1px">${icone}</span><span>${msg}</span>`;
+      ? '<path d="M20 6L9 17l-5-5"/>'
+      : '<circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/>';
+  el.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${cor}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px">${icone}</svg><span>${msg}</span>`;
   wrap.appendChild(el);
   setTimeout(() => {
     el.classList.add("saindo");
@@ -147,38 +95,67 @@ const lerLS = (chave, padrao) => {
     return padrao;
   }
 };
-const salvarLS = (chave, valor) =>
-  localStorage.setItem(chave, JSON.stringify(valor));
+const salvarLS = (chave, valor) => localStorage.setItem(chave, JSON.stringify(valor));
 
 function estrelasHTML(nota) {
   const cheias = Math.round(nota);
   let s = "";
-  for (let i = 0; i < 5; i++)
-    s += `<span style="opacity:${i < cheias ? 1 : 0.25}">★</span>`;
+  for (let i = 0; i < 5; i++) s += `<span style="opacity:${i < cheias ? 1 : 0.25}">★</span>`;
   return `<span class="estrelas" aria-label="${nota} de 5 estrelas">${s}</span>`;
 }
 
-/* ---------------- Cabeçalho / menu / ---------------- */
+function formatarDataBR(iso) {
+  if (!iso) return "—";
+  const [a, m, d] = iso.split("-").map(Number);
+  return new Date(a, m - 1, d).toLocaleDateString("pt-BR", { weekday: "short", day: "2-digit", month: "2-digit" });
+}
+
+function mascararTelefone(v) {
+  const n = v.replace(/\D/g, "").slice(0, 11);
+  if (n.length <= 2) return n.length ? `(${n}` : "";
+  if (n.length <= 6) return `(${n.slice(0, 2)}) ${n.slice(2)}`;
+  if (n.length <= 10) return `(${n.slice(0, 2)}) ${n.slice(2, 6)}-${n.slice(6)}`;
+  return `(${n.slice(0, 2)}) ${n.slice(2, 7)}-${n.slice(7)}`;
+}
+
+/* ---------------- Cabeçalho / menu / contadores ---------------- */
 
 function initHeader() {
-  const header = $("#siteHeader");
-  const onScroll = () =>
-    header.classList.toggle("com-sombra", window.scrollY > 8);
-  window.addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
-
   const btn = $("#menuBtn");
   const menu = $("#mobileMenu");
   btn?.addEventListener("click", () => {
-    const aberto = menu.classList.toggle("hidden");
-    btn.setAttribute("aria-expanded", String(!aberto));
+    const escondido = menu.classList.toggle("hidden");
+    menu.classList.toggle("flex", escondido === false);
+    btn.setAttribute("aria-expanded", String(!escondido));
   });
   $$("#mobileMenu a").forEach((a) =>
     a.addEventListener("click", () => {
       menu.classList.add("hidden");
+      menu.classList.remove("flex");
       btn.setAttribute("aria-expanded", "false");
     })
   );
+
+  const dropBtn = $("#navBoutiqueBtn");
+  const drop = $("#navDrop");
+  dropBtn?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const aberto = drop.classList.toggle("hidden");
+    dropBtn.setAttribute("aria-expanded", String(!aberto));
+  });
+  document.addEventListener("click", () => {
+    drop?.classList.add("hidden");
+    dropBtn?.setAttribute("aria-expanded", "false");
+  });
+
+  $$("[data-cat-link]").forEach((a) =>
+    a.addEventListener("click", () => filtrarCategoria(a.dataset.catLink))
+  );
+
+  $("#navSearchBtn")?.addEventListener("click", () => {
+    document.querySelector("#loja")?.scrollIntoView({ behavior: "smooth" });
+    setTimeout(() => $("#searchInput")?.focus(), 500);
+  });
 }
 
 function initContadores() {
@@ -186,24 +163,18 @@ function initContadores() {
   if (!els.length) return;
   const animar = (el) => {
     const alvo = Number(el.dataset.contar);
-    const dur = 1400;
     const t0 = performance.now();
     const passo = (t) => {
-      const p = Math.min((t - t0) / dur, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = Math.round(alvo * eased).toLocaleString("pt-BR");
+      const p = Math.min((t - t0) / 1400, 1);
+      el.textContent = Math.round(alvo * (1 - Math.pow(1 - p, 3))).toLocaleString("pt-BR");
       if (p < 1) requestAnimationFrame(passo);
     };
     requestAnimationFrame(passo);
   };
   const io = new IntersectionObserver(
-    (entries) =>
-      entries.forEach((e) => {
-        if (e.isIntersecting) {
-          animar(e.target);
-          io.unobserve(e.target);
-        }
-      }),
+    (entries) => entries.forEach((e) => {
+      if (e.isIntersecting) { animar(e.target); io.unobserve(e.target); }
+    }),
     { threshold: 0.4 }
   );
   els.forEach((e) => io.observe(e));
@@ -216,20 +187,21 @@ function renderServicos() {
   if (!grid) return;
   grid.innerHTML = SERVICOS.map(
     (s) => `
-    <article class="card card-servico p-6 flex flex-col gap-3">
-      <div class="flex items-start justify-between gap-3">
-        <div class="icone-servico" style="background:${s.cor}">${ICONES[s.icone]}</div>
-        ${s.destaque ? `<span class="selo selo-top">${s.destaque}</span>` : ""}
-      </div>
-      <h3 class="font-display font-bold text-xl leading-tight">${s.nome}</h3>
-      <p class="text-sm font-semibold" style="color:#78716c">${s.desc}</p>
-      <div class="mt-auto pt-2 flex items-end justify-between gap-2">
+    <article class="card card-produto p-5 flex flex-col gap-2.5 w-60 sm:w-64 flex-shrink-0" style="scroll-snap-align:start">
+      <div class="flex items-center gap-3">
+        <div class="icone-servico !w-12 !h-12" style="background:${s.cor}">${ICONES[s.icone] || ICONES.pata}</div>
         <div>
-          <p class="text-xs font-bold uppercase tracking-wide" style="color:#a8a29e">${s.porPorte ? "a partir de" : "valor único"}</p>
-          <p class="font-display font-extrabold text-2xl" style="color:#0f766e">${dinheiro(s.preco)}</p>
-          <p class="text-xs font-bold" style="color:#a8a29e">Duração: ${s.duracao}</p>
+          <h3 class="font-display font-extrabold leading-tight">${s.nome}</h3>
+          <p class="text-xs font-bold" style="color:#a89e83">${s.duracao}</p>
         </div>
-        <button class="btn btn-caramelo !px-5 !py-2.5 text-sm" data-agendar="${s.id}">Agendar</button>
+      </div>
+      ${s.destaque ? `<span class="selo selo-top self-start">${s.destaque}</span>` : ""}
+      <div class="flex items-end justify-between gap-2 mt-auto pt-1">
+        <div>
+          <p class="text-[0.7rem] font-bold uppercase tracking-wide" style="color:#a89e83">${s.por_porte ? "a partir de" : "valor único"}</p>
+          <p class="font-display font-black text-xl" style="color:#14532D">${dinheiro(s.preco)}</p>
+        </div>
+        <button class="btn btn-verde !px-4 !py-2 text-xs" data-agendar="${s.id}">Selecionar</button>
       </div>
     </article>`
   ).join("");
@@ -241,9 +213,9 @@ function renderServicos() {
         select.value = btn.dataset.agendar;
         select.dispatchEvent(new Event("change"));
       }
-      document.querySelector("#agendar")?.scrollIntoView({ behavior: "smooth" });
+      $("#bookingForm")?.scrollIntoView({ behavior: "smooth", block: "center" });
       const s = SERVICOS.find((x) => x.id === btn.dataset.agendar);
-      toast(`Serviço <b>${s.nome}</b> selecionado. Complete o agendamento!`, "info");
+      if (s) toast(`Serviço <b>${s.nome}</b> selecionado.`, "info");
     })
   );
 }
@@ -252,34 +224,23 @@ function renderServicos() {
 
 const agendamento = { slot: null };
 
-function hashStr(str) {
-  let h = 0;
-  for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0;
-  return h;
+function servicoSelecionado() {
+  return SERVICOS.find((s) => s.id === $("#bkService")?.value);
 }
-
-function formatarDataBR(iso) {
-  if (!iso) return "—";
-  const [a, m, d] = iso.split("-").map(Number);
-  const dt = new Date(a, m - 1, d);
-  return dt.toLocaleDateString("pt-BR", { weekday: "short", day: "2-digit", month: "2-digit" });
+function porteSelecionado() {
+  return document.querySelector('input[name="porte"]:checked')?.value || "P";
 }
 
 function initAgendamento() {
   const selServico = $("#bkService");
   const selPro = $("#bkPro");
   const inputData = $("#bkDate");
-  const slotsWrap = $("#slotsWrap");
-  if (!selServico || !inputData || !slotsWrap) return;
+  if (!selServico || !inputData) return;
 
-  selServico.innerHTML =
-    `<option value="" disabled selected>Selecione um serviço…</option>` +
-    SERVICOS.map((s) => `<option value="${s.id}">${s.nome} — ${dinheiro(s.preco)}${s.porPorte ? "+" : ""}</option>`).join("");
-
-  selPro.innerHTML = PROFISSIONAIS.map((p) => `<option value="${p.id}">${p.nome}</option>`).join("");
+  selPro.innerHTML = PROFISSIONAIS.map((p) => `<option value="${p.nome}">${p.nome}</option>`).join("");
 
   const hoje = new Date();
-  const iso = (d) => d.toISOString().slice(0, 10);
+  const iso = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
   const max = new Date();
   max.setDate(max.getDate() + 60);
   inputData.min = iso(hoje);
@@ -288,86 +249,74 @@ function initAgendamento() {
   inputData.addEventListener("change", renderSlots);
   selServico.addEventListener("change", atualizarEstimativa);
   $$('input[name="porte"]').forEach((r) => r.addEventListener("change", atualizarEstimativa));
-
-  $("#bkPhone")?.addEventListener("input", (e) => {
-    e.target.value = mascararTelefone(e.target.value);
-  });
-
+  $("#bkPhone")?.addEventListener("input", (e) => { e.target.value = mascararTelefone(e.target.value); });
   $("#bookingForm")?.addEventListener("submit", confirmarAgendamento);
 
-  renderSlots();
+  if (API_OK) carregarMeusAgendamentos();
+  else {
+    $("#myBookings").innerHTML = `<p class="text-sm font-bold py-2" style="color:#a89e83">Conecte o backend para ver seus agendamentos.</p>`;
+    $("#slotsWrap").innerHTML = `<p class="text-sm font-bold col-span-full py-2" style="color:#a89e83">Backend offline — inicie a API para ver horários.</p>`;
+  }
   atualizarEstimativa();
-  renderMeusAgendamentos();
 }
 
-function renderSlots() {
+function popularServicosSelect() {
+  const sel = $("#bkService");
+  if (!sel) return;
+  sel.innerHTML =
+    `<option value="" disabled selected>Selecione um serviço…</option>` +
+    SERVICOS.map((s) => `<option value="${s.id}">${s.nome} — ${dinheiro(s.preco)}${s.por_porte ? "+" : ""}</option>`).join("");
+}
+
+async function renderSlots() {
   const inputData = $("#bkDate");
   const wrap = $("#slotsWrap");
   const aviso = $("#slotsAviso");
   agendamento.slot = null;
 
   if (!inputData.value) {
-    wrap.innerHTML = `<p class="text-sm font-bold col-span-full py-2" style="color:#a8a29e">Escolha uma data para ver os horários disponíveis.</p>`;
+    wrap.innerHTML = `<p class="text-sm font-bold col-span-full py-2" style="color:#a89e83">Escolha uma data para ver os horários disponíveis.</p>`;
     if (aviso) aviso.textContent = "";
     atualizarEstimativa();
     return;
   }
-
-  const [a, m, d] = inputData.value.split("-").map(Number);
-  const dia = new Date(a, m - 1, d).getDay();
-
-  if (dia === 0) {
-    wrap.innerHTML = "";
-    if (aviso) aviso.textContent = "Fechamos aos domingos. Escolha outro dia para mimar seu pet!";
-    atualizarEstimativa();
+  if (!API_OK) {
+    wrap.innerHTML = `<p class="text-sm font-bold col-span-full py-2" style="color:#a89e83">Backend offline — inicie a API para ver horários.</p>`;
     return;
   }
-  if (aviso) aviso.textContent = dia === 6 ? "Aos sábados atendemos das 8h às 14h." : "";
 
-  let lista = HORARIOS.filter((h) => (dia === 6 ? h <= "13:00" : true));
-
-  // Simula horários já ocupados de forma estável por data
-  const h = hashStr(inputData.value);
-  const ocupados = new Set([lista[h % lista.length], lista[(h >> 3) % lista.length]]);
-
-  // Bloqueia horários que já passaram (se for hoje)
-  const agora = new Date();
-  const ehHoje = inputData.value === agora.toISOString().slice(0, 10);
-
-  wrap.innerHTML = lista
-    .map((t) => {
-      const passado =
-        ehHoje &&
-        Number(t.slice(0, 2)) * 60 + Number(t.slice(3)) <= agora.getHours() * 60 + agora.getMinutes() + 60;
-      const off = ocupados.has(t) || passado;
-      return `<button type="button" class="slot" data-slot="${t}" ${off ? "disabled" : ""}>${t}</button>`;
-    })
-    .join("");
-
-  $$("#slotsWrap .slot").forEach((b) =>
-    b.addEventListener("click", () => {
-      $$("#slotsWrap .slot").forEach((x) => x.classList.remove("selecionado"));
-      b.classList.add("selecionado");
-      agendamento.slot = b.dataset.slot;
+  wrap.innerHTML = `<p class="text-sm font-bold col-span-full py-2" style="color:#a89e83">Buscando horários…</p>`;
+  try {
+    const disp = await apiGet(`/disponibilidade?data=${inputData.value}`);
+    if (!disp.aberto) {
+      wrap.innerHTML = "";
+      if (aviso) aviso.textContent = disp.motivo || "Fechado neste dia.";
       atualizarEstimativa();
-    })
-  );
+      return;
+    }
+    if (aviso) aviso.textContent = new Date(inputData.value + "T12:00").getDay() === 6 ? "Aos sábados atendemos das 8h às 14h." : "";
+    wrap.innerHTML = disp.slots
+      .map((s) => `<button type="button" class="slot" data-slot="${s.hora}" ${s.livre ? "" : "disabled"}>${s.hora}</button>`)
+      .join("");
+    $$("#slotsWrap .slot").forEach((b) =>
+      b.addEventListener("click", () => {
+        $$("#slotsWrap .slot").forEach((x) => x.classList.remove("selecionado"));
+        b.classList.add("selecionado");
+        agendamento.slot = b.dataset.slot;
+        atualizarEstimativa();
+      })
+    );
+  } catch (e) {
+    wrap.innerHTML = `<p class="text-sm font-bold col-span-full py-2" style="color:#B91C1C">Erro ao buscar horários: ${e.message}</p>`;
+  }
   atualizarEstimativa();
-}
-
-function servicoSelecionado() {
-  return SERVICOS.find((s) => s.id === $("#bkService")?.value);
-}
-function porteSelecionado() {
-  return document.querySelector('input[name="porte"]:checked')?.value || "P";
 }
 
 function calcularEstimativa() {
   const s = servicoSelecionado();
   if (!s) return null;
   const porte = porteSelecionado();
-  const total = s.porPorte ? s.preco * MULT_PORTE[porte] : s.preco;
-  return { servico: s, porte, total };
+  return { servico: s, porte, total: s.preco * (s.por_porte ? MULT_PORTE[porte] : 1) };
 }
 
 function atualizarEstimativa() {
@@ -375,153 +324,149 @@ function atualizarEstimativa() {
   if (!box) return;
   const est = calcularEstimativa();
   if (!est) {
-    box.innerHTML = `<p class="text-sm font-bold" style="color:#a8a29e">Selecione um serviço para ver a estimativa de valor.</p>`;
+    box.innerHTML = `<p class="text-sm font-bold" style="color:#a89e83">Selecione um serviço para ver a estimativa de valor.</p>`;
     return;
   }
   const data = $("#bkDate")?.value;
   box.innerHTML = `
-    <div class="flex items-center justify-between text-sm font-bold" style="color:#78716c">
-      <span>${est.servico.nome}</span><span>${dinheiro(est.servico.preco)}${est.servico.porPorte ? " base" : ""}</span>
+    <div class="flex items-center justify-between text-sm font-bold" style="color:#5F6B5F">
+      <span>${est.servico.nome}</span><span>${dinheiro(est.servico.preco)}${est.servico.por_porte ? " base" : ""}</span>
     </div>
-    ${
-      est.servico.porPorte
-        ? `<div class="flex items-center justify-between text-sm font-bold mt-1" style="color:#78716c">
-             <span>Porte ${est.porte} (${ROTULO_PORTE[est.porte].split(" ")[0]}${est.porte === "P" ? "" : " ×" + MULT_PORTE[est.porte].toLocaleString("pt-BR")})</span>
-             <span>${dinheiro(est.total)}</span>
-           </div>`
-        : ""
-    }
-    <div class="flex items-center justify-between mt-2 pt-2" style="border-top:2px dashed #f3e7d7">
-      <span class="font-display font-bold">Estimativa</span>
-      <span class="font-display font-extrabold text-2xl" style="color:#ea580c">${dinheiro(est.total)}</span>
+    ${est.servico.por_porte ? `<div class="flex items-center justify-between text-sm font-bold mt-1" style="color:#5F6B5F"><span>Porte ${est.porte}</span><span>${dinheiro(est.total)}</span></div>` : ""}
+    <div class="flex items-center justify-between mt-2 pt-2" style="border-top:2px dashed #e7ddbd">
+      <span class="font-display font-extrabold">Estimativa</span>
+      <span class="font-display font-black text-2xl" style="color:#14532D">${dinheiro(est.total)}</span>
     </div>
-    <p class="text-xs font-bold mt-1" style="color:#a8a29e">
+    <p class="text-xs font-bold mt-1" style="color:#a89e83">
       ${data ? formatarDataBR(data) : "Data a escolher"}${agendamento.slot ? " às " + agendamento.slot : ""} · ${est.servico.duracao}
     </p>`;
 }
 
-function confirmarAgendamento(e) {
+async function confirmarAgendamento(e) {
   e.preventDefault();
+  if (!API_OK) return toast("Backend offline — inicie a API para agendar.", "erro");
+
   const pet = $("#bkPet").value.trim();
   const tutor = $("#bkTutor").value.trim();
   const fone = $("#bkPhone").value.trim();
   const data = $("#bkDate").value;
-  const est = calcularEstimativa();
+  const serv = servicoSelecionado();
 
-  if (!est) return toast("Escolha um serviço para continuar.", "erro");
+  if (!serv) return toast("Escolha um serviço para continuar.", "erro");
   if (!pet) return toast("Conte pra gente o nome do pet!", "erro");
   if (!data) return toast("Escolha a data do atendimento.", "erro");
   if (!agendamento.slot) return toast("Selecione um horário disponível.", "erro");
   if (!tutor) return toast("Informe o nome do tutor.", "erro");
   if (fone.replace(/\D/g, "").length < 10) return toast("Informe um telefone válido com DDD.", "erro");
 
-  const especie = document.querySelector('input[name="especie"]:checked')?.value || "Cão";
-  const pro = PROFISSIONAIS.find((p) => p.id === $("#bkPro").value)?.nome || "";
-
-  const ag = {
-    protocolo: gerarProtocolo("PC"),
-    pet, especie, porte: porteSelecionado(),
-    servico: est.servico.nome, preco: est.total,
-    pro, data, hora: agendamento.slot, tutor, fone,
-    obs: $("#bkNotes").value.trim(),
-    criadoEm: new Date().toISOString(),
-  };
-
-  const lista = lerLS("patachic_bookings", []);
-  lista.unshift(ag);
-  salvarLS("patachic_bookings", lista);
-
-  abrirModalAgendamento(ag);
-  e.target.reset();
-  agendamento.slot = null;
-  renderSlots();
-  atualizarEstimativa();
-  renderMeusAgendamentos();
+  const btn = e.target.querySelector('button[type="submit"]');
+  btn.disabled = true;
+  try {
+    const ag = await apiPost("/agendamentos", {
+      pet,
+      especie: document.querySelector('input[name="especie"]:checked')?.value || "Cão",
+      porte: porteSelecionado(),
+      servico_id: serv.id,
+      profissional: $("#bkPro").value,
+      data,
+      hora: agendamento.slot,
+      tutor,
+      fone,
+      obs: $("#bkNotes").value.trim(),
+    });
+    salvarLS("patachic_fone", fone);
+    abrirModalAgendamento(ag);
+    e.target.reset();
+    agendamento.slot = null;
+    renderSlots();
+    atualizarEstimativa();
+    carregarMeusAgendamentos();
+  } catch (err) {
+    toast(err.message, "erro");
+    renderSlots();
+  } finally {
+    btn.disabled = false;
+  }
 }
 
-function renderMeusAgendamentos() {
+async function carregarMeusAgendamentos() {
   const wrap = $("#myBookings");
   if (!wrap) return;
-  const lista = lerLS("patachic_bookings", []);
-  if (!lista.length) {
-    wrap.innerHTML = `<p class="text-sm font-bold py-2" style="color:#a8a29e">Você ainda não tem agendamentos. Que tal mimar seu pet hoje?</p>`;
+  const fone = lerLS("patachic_fone", "");
+  if (!fone) {
+    wrap.innerHTML = `<p class="text-sm font-bold py-2" style="color:#a89e83">Você ainda não tem agendamentos. Que tal mimar seu pet hoje?</p>`;
     return;
   }
-  wrap.innerHTML = lista
-    .map(
-      (b) => `
-      <div class="card p-4 flex items-center gap-3">
-        <div class="icone-servico !w-11 !h-11 !rounded-xl" style="background:#0f766e">
+  try {
+    const lista = await apiGet(`/agendamentos?telefone=${encodeURIComponent(fone)}`);
+    if (!lista.length) {
+      wrap.innerHTML = `<p class="text-sm font-bold py-2" style="color:#a89e83">Nenhum agendamento ativo para este WhatsApp.</p>`;
+      return;
+    }
+    wrap.innerHTML = lista.map((b) => `
+      <div class="card !rounded-2xl p-4 flex items-center gap-3">
+        <div class="flex items-center justify-center flex-shrink-0" style="width:2.75rem;height:2.75rem;border-radius:0.9rem;background:#14532D;color:#fff">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
         </div>
         <div class="flex-1 min-w-0">
-          <p class="font-display font-bold leading-tight truncate">${b.servico}</p>
-          <p class="text-xs font-bold" style="color:#78716c">${b.pet} · ${formatarDataBR(b.data)} às ${b.hora}</p>
-          <p class="text-xs font-extrabold" style="color:#0f766e">${b.protocolo} · ${dinheiro(b.preco)}</p>
+          <p class="font-display font-extrabold leading-tight truncate">${b.servico}</p>
+          <p class="text-xs font-bold" style="color:#5F6B5F">${b.pet} · ${formatarDataBR(b.data)} às ${b.hora}</p>
+          <p class="text-xs font-extrabold" style="color:#1E7A44">${b.protocolo} · ${dinheiro(b.preco)}</p>
         </div>
-        <button class="qtd-btn !w-8 !h-8" data-cancelar="${b.protocolo}" title="Cancelar agendamento" aria-label="Cancelar agendamento" style="color:#e11d48">✕</button>
-      </div>`
-    )
-    .join("");
-
-  $$("#myBookings [data-cancelar]").forEach((btn) =>
-    btn.addEventListener("click", () => {
-      const prot = btn.dataset.cancelar;
-      salvarLS(
-        "patachic_bookings",
-        lerLS("patachic_bookings", []).filter((b) => b.protocolo !== prot)
-      );
-      renderMeusAgendamentos();
-      toast(`Agendamento <b>${prot}</b> cancelado.`, "info");
-    })
-  );
+        <button class="qtd-btn !w-8 !h-8" data-cancelar="${b.protocolo}" title="Cancelar agendamento" aria-label="Cancelar agendamento" style="color:#B91C1C">✕</button>
+      </div>`).join("");
+    $$("#myBookings [data-cancelar]").forEach((btn) =>
+      btn.addEventListener("click", async () => {
+        try {
+          await apiDel(`/agendamentos/${btn.dataset.cancelar}`);
+          toast(`Agendamento <b>${btn.dataset.cancelar}</b> cancelado.`, "info");
+          carregarMeusAgendamentos();
+          renderSlots();
+        } catch (err) {
+          toast(err.message, "erro");
+        }
+      })
+    );
+  } catch {
+    wrap.innerHTML = `<p class="text-sm font-bold py-2" style="color:#a89e83">Não foi possível carregar seus agendamentos.</p>`;
+  }
 }
 
 function abrirModalAgendamento(ag) {
-  const modal = $("#bookingModal");
   $("#bmDetails").innerHTML = `
-    <div class="card !bg-white p-5 text-left space-y-1.5 text-sm font-bold" style="color:#57534e">
-      <p><span style="color:#a8a29e">Pet:</span> ${ag.pet} (${ag.especie} · porte ${ag.porte})</p>
-      <p><span style="color:#a8a29e">Serviço:</span> ${ag.servico}</p>
-      <p><span style="color:#a8a29e">Quando:</span> ${formatarDataBR(ag.data)} às ${ag.hora}</p>
-      <p><span style="color:#a8a29e">Profissional:</span> ${ag.pro}</p>
-      <p><span style="color:#a8a29e">Tutor:</span> ${ag.tutor} · ${ag.fone}</p>
-      <p class="text-base pt-1"><span style="color:#a8a29e">Estimativa:</span> <span class="font-display font-extrabold text-xl" style="color:#ea580c">${dinheiro(ag.preco)}</span></p>
+    <div class="card p-5 text-left space-y-1.5 text-sm font-bold" style="color:#5F6B5F">
+      <p><span style="color:#a89e83">Pet:</span> ${ag.pet} (${ag.especie} · porte ${ag.porte})</p>
+      <p><span style="color:#a89e83">Serviço:</span> ${ag.servico}</p>
+      <p><span style="color:#a89e83">Quando:</span> ${formatarDataBR(ag.data)} às ${ag.hora}</p>
+      <p><span style="color:#a89e83">Profissional:</span> ${ag.profissional}</p>
+      <p><span style="color:#a89e83">Protocolo:</span> <b style="color:#14532D">${ag.protocolo}</b></p>
+      <p class="text-base pt-1"><span style="color:#a89e83">Estimativa:</span> <span class="font-display font-black text-xl" style="color:#14532D">${dinheiro(ag.preco)}</span></p>
     </div>`;
-  const msg = encodeURIComponent(
-    `Olá! Sou ${ag.tutor} e agendei pelo site: ${ag.servico} para ${ag.pet} em ${formatarDataBR(ag.data)} às ${ag.hora}. Protocolo ${ag.protocolo}.`
-  );
+  const msg = encodeURIComponent(`Olá! Sou ${ag.tutor} e agendei pelo site: ${ag.servico} para ${ag.pet} em ${formatarDataBR(ag.data)} às ${ag.hora}. Protocolo ${ag.protocolo}.`);
   $("#bmWhatsapp").href = `https://wa.me/${WHATSAPP}?text=${msg}`;
-  modal.classList.add("aberto");
+  $("#bookingModal").classList.add("aberto");
   document.body.style.overflow = "hidden";
-}
-
-function mascararTelefone(v) {
-  const n = v.replace(/\D/g, "").slice(0, 11);
-  if (n.length <= 2) return n.length ? `(${n}` : "";
-  if (n.length <= 6) return `(${n.slice(0, 2)}) ${n.slice(2)}`;
-  if (n.length <= 10) return `(${n.slice(0, 2)}) ${n.slice(2, 6)}-${n.slice(6)}`;
-  return `(${n.slice(0, 2)}) ${n.slice(2, 7)}-${n.slice(7)}`;
 }
 
 /* ---------------- Loja ---------------- */
 
 const loja = { busca: "", categoria: "Todos", ordem: "rel" };
 
+function filtrarCategoria(cat) {
+  loja.categoria = cat;
+  $$("#pillsWrap .pilula").forEach((x) => x.classList.toggle("ativa", x.dataset.cat === cat));
+  renderProdutos();
+}
+
 function initLoja() {
   const pills = $("#pillsWrap");
   if (pills) {
     pills.innerHTML = CATEGORIAS.map((c) => {
-      const n = c === "Todos" ? PRODUTOS.length : PRODUTOS.filter((p) => p.cat === c).length;
+      const n = c === "Todos" ? PRODUTOS.length : PRODUTOS.filter((p) => p.categoria === c).length;
       return `<button class="pilula ${c === "Todos" ? "ativa" : ""}" data-cat="${c}">${c} <span style="opacity:.55">(${n})</span></button>`;
     }).join("");
     $$("#pillsWrap .pilula").forEach((b) =>
-      b.addEventListener("click", () => {
-        $$("#pillsWrap .pilula").forEach((x) => x.classList.remove("ativa"));
-        b.classList.add("ativa");
-        loja.categoria = b.dataset.cat;
-        renderProdutos();
-      })
+      b.addEventListener("click", () => filtrarCategoria(b.dataset.cat))
     );
   }
 
@@ -529,20 +474,31 @@ function initLoja() {
     loja.busca = e.target.value.trim().toLowerCase();
     renderProdutos();
   });
-
   $("#sortSelect")?.addEventListener("change", (e) => {
     loja.ordem = e.target.value;
     renderProdutos();
   });
+  $("#heroSearchForm")?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const q = $("#heroSearch").value.trim();
+    $("#searchInput").value = q;
+    loja.busca = q.toLowerCase();
+    renderProdutos();
+    document.querySelector("#loja")?.scrollIntoView({ behavior: "smooth" });
+  });
+
+  $("#bestPrev")?.addEventListener("click", () => $("#bestTrack")?.scrollBy({ left: -300, behavior: "smooth" }));
+  $("#bestNext")?.addEventListener("click", () => $("#bestTrack")?.scrollBy({ left: 300, behavior: "smooth" }));
 
   renderProdutos();
+  renderBestSellers();
 }
 
 function produtosFiltrados() {
   let lista = PRODUTOS.filter(
     (p) =>
-      (loja.categoria === "Todos" || p.cat === loja.categoria) &&
-      (!loja.busca || `${p.nome} ${p.cat} ${p.desc}`.toLowerCase().includes(loja.busca))
+      (loja.categoria === "Todos" || p.categoria === loja.categoria) &&
+      (!loja.busca || `${p.nome} ${p.categoria} ${p.descricao}`.toLowerCase().includes(loja.busca))
   );
   if (loja.ordem === "asc") lista = [...lista].sort((a, b) => a.preco - b.preco);
   if (loja.ordem === "desc") lista = [...lista].sort((a, b) => b.preco - a.preco);
@@ -550,64 +506,66 @@ function produtosFiltrados() {
   return lista;
 }
 
+const iconeCarrinho = '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1.5"/><circle cx="19" cy="21" r="1.5"/><path d="M2 3h3l2.6 12.5a1 1 0 0 0 1 .5h8.7a1 1 0 0 0 1-.8L21 7H6"/></svg>';
+
+function cardProdutoHTML(p, extra = "") {
+  return `
+  <article class="card card-produto flex flex-col ${extra}">
+    <div class="relative overflow-hidden m-2.5 mb-0 rounded-2xl" style="aspect-ratio:1/1;background:#F4EDD8">
+      <img class="foto w-full h-full" style="object-fit:cover" src="${p.img}" alt="${p.nome}" loading="lazy">
+      ${p.selo ? `<span class="selo selo-${p.selo} absolute top-3 left-3">${p.selo_texto}</span>` : ""}
+    </div>
+    <div class="p-4 sm:p-5 flex flex-col gap-1.5 flex-1">
+      <h3 class="font-display font-extrabold text-[0.95rem] leading-snug linhas-2" style="min-height:2.7em">${p.nome}</h3>
+      <div class="flex items-center justify-between gap-2 mt-auto pt-1">
+        <div>
+          ${p.preco_antigo ? `<p class="text-xs font-bold line-through" style="color:#b3a888">${dinheiro(p.preco_antigo)}</p>` : ""}
+          <p class="font-display font-black text-lg leading-tight">${dinheiro(p.preco)}</p>
+        </div>
+        <button class="btn-carrinho" data-add="${p.id}" aria-label="Adicionar ${p.nome} ao carrinho">${iconeCarrinho}</button>
+      </div>
+      <div class="flex items-center gap-1.5 text-xs">
+        ${estrelasHTML(p.rating)}
+        <span class="font-bold" style="color:#a89e83">(${p.avaliacoes})</span>
+      </div>
+    </div>
+  </article>`;
+}
+
+function ligarBotoesAdd(ctx) {
+  $$("[data-add]", ctx).forEach((b) =>
+    b.addEventListener("click", () => adicionarCarrinho(b.dataset.add))
+  );
+}
+
 function renderProdutos() {
   const grid = $("#productsGrid");
   if (!grid) return;
   const lista = produtosFiltrados();
   $("#resultCount").textContent = lista.length === 1 ? "1 produto" : `${lista.length} produtos`;
-
   if (!lista.length) {
-    grid.innerHTML = `
-      <div class="col-span-full card p-10 text-center">
-        <p class="font-display font-bold text-xl">Nenhum produto encontrado</p>
-        <p class="font-bold text-sm mt-1" style="color:#a8a29e">Tente buscar por outro termo ou categoria.</p>
-      </div>`;
+    grid.innerHTML = `<div class="col-span-full card p-10 text-center"><p class="font-display font-extrabold text-xl">Nenhum produto encontrado</p><p class="font-bold text-sm mt-1" style="color:#a89e83">Tente buscar por outro termo ou categoria.</p></div>`;
     return;
   }
+  grid.innerHTML = lista.map((p) => cardProdutoHTML(p)).join("");
+  ligarBotoesAdd(grid);
+}
 
-  grid.innerHTML = lista
-    .map(
-      (p) => `
-      <article class="card card-produto flex flex-col">
-        <div class="relative overflow-hidden" style="aspect-ratio:1/1;background:#fff7ed">
-          <img class="foto w-full h-full" style="object-fit:cover" src="${p.img}" alt="${p.nome}" loading="lazy">
-          ${p.selo ? `<span class="selo selo-${p.selo} absolute top-3 left-3">${p.seloTexto}</span>` : ""}
-        </div>
-        <div class="p-5 flex flex-col gap-1.5 flex-1">
-          <p class="text-xs font-extrabold uppercase tracking-wider" style="color:#0f766e">${p.cat}</p>
-          <h3 class="font-display font-bold text-lg leading-snug">${p.nome}</h3>
-          <div class="flex items-center gap-2 text-sm">
-            ${estrelasHTML(p.rating)}
-            <span class="font-bold text-xs" style="color:#a8a29e">${p.rating.toLocaleString("pt-BR")} (${p.avaliacoes})</span>
-          </div>
-          <div class="mt-auto pt-2">
-            ${p.antigo ? `<p class="text-sm font-bold line-through" style="color:#b8aca0">${dinheiro(p.antigo)}</p>` : ""}
-            <p class="font-display font-extrabold text-2xl" style="color:#292524">${dinheiro(p.preco)}</p>
-            <p class="text-xs font-bold" style="color:#a8a29e">em até 3x de ${dinheiro(p.preco / 3)} sem juros</p>
-            <button class="btn btn-caramelo w-full mt-3 !py-2.5 text-sm" data-add="${p.id}">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1.5"/><circle cx="19" cy="21" r="1.5"/><path d="M2 3h3l2.6 12.5a1 1 0 0 0 1 .5h8.7a1 1 0 0 0 1-.8L21 7H6"/></svg>
-              Adicionar
-            </button>
-          </div>
-        </div>
-      </article>`
-    )
-    .join("");
-
-  $$('#productsGrid [data-add]').forEach((b) =>
-    b.addEventListener("click", () => adicionarCarrinho(b.dataset.add))
-  );
+function renderBestSellers() {
+  const track = $("#bestTrack");
+  if (!track) return;
+  const top = [...PRODUTOS].sort((a, b) => b.avaliacoes - a.avaliacoes).slice(0, 8);
+  track.innerHTML = top.map((p) => cardProdutoHTML(p, "w-52 sm:w-60 flex-shrink-0")).join("");
+  track.querySelectorAll("article").forEach((a) => (a.style.scrollSnapAlign = "start"));
+  ligarBotoesAdd(track);
 }
 
 /* ---------------- Carrinho ---------------- */
 
-let cupomAtivo = null;
+let cupomAtivo = null; // {codigo, percentual}
 
 const getCarrinho = () => lerLS("patachic_cart", []);
-const setCarrinho = (c) => {
-  salvarLS("patachic_cart", c);
-  renderCarrinho();
-};
+const setCarrinho = (c) => { salvarLS("patachic_cart", c); renderCarrinho(); };
 
 function adicionarCarrinho(id) {
   const c = getCarrinho();
@@ -616,7 +574,7 @@ function adicionarCarrinho(id) {
   else c.push({ id, qtd: 1 });
   setCarrinho(c);
   const p = PRODUTOS.find((x) => x.id === id);
-  toast(`<b>${p.nome}</b> adicionado ao carrinho!`);
+  if (p) toast(`<b>${p.nome}</b> adicionado ao carrinho!`);
   abrirCarrinho();
 }
 
@@ -626,7 +584,7 @@ function totaisCarrinho() {
     const p = PRODUTOS.find((x) => x.id === i.id);
     return s + (p ? p.preco * i.qtd : 0);
   }, 0);
-  const desconto = cupomAtivo ? subtotal * 0.1 : 0;
+  const desconto = cupomAtivo ? subtotal * cupomAtivo.percentual : 0;
   const base = subtotal - desconto;
   const frete = c.length === 0 || base >= FRETE_GRATIS_MINIMO ? 0 : VALOR_FRETE;
   return { subtotal, desconto, frete, total: base + frete, qtd: c.reduce((s, i) => s + i.qtd, 0) };
@@ -647,39 +605,37 @@ function renderCarrinho() {
     if (!c.length) {
       wrap.innerHTML = `
         <div class="text-center py-10">
-          <div class="mx-auto mb-4 flex items-center justify-center" style="width:5rem;height:5rem;border-radius:999px;background:#fff7ed">
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#d6c3ae" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1.5"/><circle cx="19" cy="21" r="1.5"/><path d="M2 3h3l2.6 12.5a1 1 0 0 0 1 .5h8.7a1 1 0 0 0 1-.8L21 7H6"/></svg>
+          <div class="mx-auto mb-4 flex items-center justify-center" style="width:5rem;height:5rem;border-radius:999px;background:#FFFDF6;border:1.5px solid #e7ddbd">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#c9bd97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1.5"/><circle cx="19" cy="21" r="1.5"/><path d="M2 3h3l2.6 12.5a1 1 0 0 0 1 .5h8.7a1 1 0 0 0 1-.8L21 7H6"/></svg>
           </div>
-          <p class="font-display font-bold text-lg">Seu carrinho está vazio</p>
-          <p class="text-sm font-bold" style="color:#a8a29e">Que tal um agrado para o seu pet?</p>
+          <p class="font-display font-extrabold text-lg">Seu carrinho está vazio</p>
+          <p class="text-sm font-bold" style="color:#a89e83">Que tal um agrado para o seu pet?</p>
         </div>`;
     } else {
-      wrap.innerHTML = c
-        .map((i) => {
-          const p = PRODUTOS.find((x) => x.id === i.id);
-          if (!p) return "";
-          return `
-          <div class="item-carrinho card !rounded-2xl p-3 flex gap-3 items-center">
-            <img src="${p.img}" alt="${p.nome}">
-            <div class="flex-1 min-w-0">
-              <p class="font-bold text-sm leading-snug truncate">${p.nome}</p>
-              <p class="font-display font-extrabold" style="color:#0f766e">${dinheiro(p.preco)}</p>
-              <div class="flex items-center gap-2 mt-1">
-                <button class="qtd-btn" data-dec="${p.id}" aria-label="Diminuir quantidade">−</button>
-                <span class="font-extrabold text-sm w-5 text-center">${i.qtd}</span>
-                <button class="qtd-btn" data-inc="${p.id}" aria-label="Aumentar quantidade">+</button>
-              </div>
+      wrap.innerHTML = c.map((i) => {
+        const p = PRODUTOS.find((x) => x.id === i.id);
+        if (!p) return "";
+        return `
+        <div class="item-carrinho card !rounded-2xl p-3 flex gap-3 items-center">
+          <img src="${p.img}" alt="${p.nome}">
+          <div class="flex-1 min-w-0">
+            <p class="font-bold text-sm leading-snug linhas-2">${p.nome}</p>
+            <p class="font-display font-black" style="color:#14532D">${dinheiro(p.preco)}</p>
+            <div class="flex items-center gap-2 mt-1">
+              <button class="qtd-btn" data-dec="${p.id}" aria-label="Diminuir quantidade">−</button>
+              <span class="font-extrabold text-sm w-5 text-center">${i.qtd}</span>
+              <button class="qtd-btn" data-inc="${p.id}" aria-label="Aumentar quantidade">+</button>
             </div>
-            <button class="qtd-btn" data-del="${p.id}" title="Remover" aria-label="Remover item" style="color:#e11d48">✕</button>
-          </div>`;
-        })
-        .join("");
+          </div>
+          <button class="qtd-btn" data-del="${p.id}" title="Remover" aria-label="Remover item" style="color:#B91C1C">✕</button>
+        </div>`;
+      }).join("");
     }
   }
 
-  // Totais
   $("#subtotalVal").textContent = dinheiro(t.subtotal);
   $("#discountRow").style.display = cupomAtivo ? "flex" : "none";
+  if (cupomAtivo) $("#discountLabel").textContent = `Desconto (${cupomAtivo.codigo})`;
   $("#discountVal").textContent = "−" + dinheiro(t.desconto);
   $("#shippingVal").textContent = t.frete === 0 ? "Grátis" : dinheiro(t.frete);
   $("#totalVal").textContent = dinheiro(t.total);
@@ -688,19 +644,14 @@ function renderCarrinho() {
   $("#shipBar").style.width = pct + "%";
   $("#shipMsg").innerHTML =
     t.subtotal - t.desconto >= FRETE_GRATIS_MINIMO
-      ? "Você ganhou <b style='color:#0f766e'>frete grátis</b>!"
+      ? "Você ganhou <b style='color:#1E7A44'>frete grátis</b>!"
       : `Faltam <b>${dinheiro(FRETE_GRATIS_MINIMO - (t.subtotal - t.desconto))}</b> para o frete grátis`;
 
   $("#checkoutBtn").disabled = c.length === 0;
   $("#checkoutBtn").style.opacity = c.length === 0 ? 0.5 : 1;
 
-  // Listeners dos botões de quantidade
-  $$("#cartItems [data-inc]").forEach((b) =>
-    b.addEventListener("click", () => alterarQtd(b.dataset.inc, 1))
-  );
-  $$("#cartItems [data-dec]").forEach((b) =>
-    b.addEventListener("click", () => alterarQtd(b.dataset.dec, -1))
-  );
+  $$("#cartItems [data-inc]").forEach((b) => b.addEventListener("click", () => alterarQtd(b.dataset.inc, 1)));
+  $$("#cartItems [data-dec]").forEach((b) => b.addEventListener("click", () => alterarQtd(b.dataset.dec, -1)));
   $$("#cartItems [data-del]").forEach((b) =>
     b.addEventListener("click", () => {
       setCarrinho(getCarrinho().filter((i) => i.id !== b.dataset.del));
@@ -736,24 +687,43 @@ function initCarrinho() {
   $("#cartOverlay")?.addEventListener("click", fecharCarrinho);
   $("#continueBtn")?.addEventListener("click", fecharCarrinho);
 
-  $("#couponBtn")?.addEventListener("click", () => {
-    const v = $("#couponInput").value.trim().toUpperCase();
+  $("#couponBtn")?.addEventListener("click", async () => {
+    const codigo = $("#couponInput").value.trim().toUpperCase();
     const msg = $("#couponMsg");
-    if (v === CUPOM_BEMVINDO) {
-      cupomAtivo = v;
-      msg.textContent = "Cupom aplicado: 10% de desconto!";
-      msg.style.color = "#0f766e";
-      toast("Cupom <b>BEMVINDO10</b> aplicado!");
-    } else {
+    if (!codigo) {
       cupomAtivo = null;
-      msg.textContent = v ? "Cupom inválido. Tente BEMVINDO10." : "";
-      msg.style.color = "#e11d48";
+      msg.textContent = "";
+      renderCarrinho();
+      return;
+    }
+    if (!API_OK) {
+      msg.textContent = "Backend offline — cupom indisponível.";
+      msg.style.color = "#B91C1C";
+      return;
+    }
+    try {
+      const r = await apiPost("/cupons/validar", { codigo, subtotal: totaisCarrinho().subtotal });
+      if (r.valido) {
+        cupomAtivo = { codigo: r.codigo, percentual: r.percentual };
+        msg.textContent = `Cupom aplicado: ${Math.round(r.percentual * 100)}% de desconto!`;
+        msg.style.color = "#1E7A44";
+        toast(`Cupom <b>${r.codigo}</b> aplicado!`);
+      } else {
+        cupomAtivo = null;
+        msg.textContent = "Cupom inválido. Tente PATACHIC30.";
+        msg.style.color = "#B91C1C";
+      }
+    } catch {
+      cupomAtivo = null;
+      msg.textContent = "Não foi possível validar o cupom.";
+      msg.style.color = "#B91C1C";
     }
     renderCarrinho();
   });
 
   $("#checkoutBtn")?.addEventListener("click", () => {
     if (!getCarrinho().length) return;
+    if (!API_OK) return toast("Backend offline — inicie a API para finalizar.", "erro");
     fecharCarrinho();
     abrirCheckout();
   });
@@ -766,9 +736,7 @@ function initCarrinho() {
     const n = e.target.value.replace(/\D/g, "").slice(0, 8);
     e.target.value = n.length > 5 ? n.slice(0, 5) + "-" + n.slice(5) : n;
   });
-  $("#coPhone")?.addEventListener("input", (e) => {
-    e.target.value = mascararTelefone(e.target.value);
-  });
+  $("#coPhone")?.addEventListener("input", (e) => { e.target.value = mascararTelefone(e.target.value); });
   $("#checkoutForm")?.addEventListener("submit", finalizarPedido);
   $("#successClose")?.addEventListener("click", fecharCheckout);
 }
@@ -778,18 +746,16 @@ function initCarrinho() {
 function abrirCheckout() {
   const t = totaisCarrinho();
   $("#coSummary").innerHTML =
-    getCarrinho()
-      .map((i) => {
-        const p = PRODUTOS.find((x) => x.id === i.id);
-        return `<div class="flex justify-between gap-3 text-sm font-bold" style="color:#57534e">
-          <span class="truncate">${i.qtd}x ${p.nome}</span><span class="whitespace-nowrap">${dinheiro(p.preco * i.qtd)}</span></div>`;
-      })
-      .join("") +
-    `<div class="pt-2 mt-2 space-y-1" style="border-top:2px dashed #f3e7d7">
-      <div class="flex justify-between text-sm font-bold" style="color:#78716c"><span>Subtotal</span><span>${dinheiro(t.subtotal)}</span></div>
-      ${cupomAtivo ? `<div class="flex justify-between text-sm font-bold" style="color:#0f766e"><span>Cupom ${cupomAtivo}</span><span>−${dinheiro(t.desconto)}</span></div>` : ""}
-      <div class="flex justify-between text-sm font-bold" style="color:#78716c"><span>Frete</span><span>${t.frete === 0 ? "Grátis" : dinheiro(t.frete)}</span></div>
-      <div class="flex justify-between items-center"><span class="font-display font-bold text-lg">Total</span><span class="font-display font-extrabold text-2xl" style="color:#ea580c">${dinheiro(t.total)}</span></div>
+    getCarrinho().map((i) => {
+      const p = PRODUTOS.find((x) => x.id === i.id);
+      return `<div class="flex justify-between gap-3 text-sm font-bold" style="color:#5F6B5F">
+        <span class="truncate">${i.qtd}x ${p.nome}</span><span class="whitespace-nowrap">${dinheiro(p.preco * i.qtd)}</span></div>`;
+    }).join("") +
+    `<div class="pt-2 mt-2 space-y-1" style="border-top:2px dashed #e7ddbd">
+      <div class="flex justify-between text-sm font-bold" style="color:#5F6B5F"><span>Subtotal</span><span>${dinheiro(t.subtotal)}</span></div>
+      ${cupomAtivo ? `<div class="flex justify-between text-sm font-bold" style="color:#1E7A44"><span>Cupom ${cupomAtivo.codigo}</span><span>−${dinheiro(t.desconto)}</span></div>` : ""}
+      <div class="flex justify-between text-sm font-bold" style="color:#5F6B5F"><span>Frete</span><span>${t.frete === 0 ? "Grátis" : dinheiro(t.frete)}</span></div>
+      <div class="flex justify-between items-center"><span class="font-display font-extrabold text-lg">Total</span><span class="font-display font-black text-2xl" style="color:#14532D">${dinheiro(t.total)}</span></div>
     </div>`;
 
   $("#coStepForm").classList.remove("hidden");
@@ -803,7 +769,7 @@ function fecharCheckout() {
   document.body.style.overflow = "";
 }
 
-function finalizarPedido(e) {
+async function finalizarPedido(e) {
   e.preventDefault();
   const nome = $("#coName").value.trim();
   const email = $("#coEmail").value.trim();
@@ -812,81 +778,36 @@ function finalizarPedido(e) {
   if (!email || !email.includes("@")) return toast("Informe um e-mail válido.", "erro");
   if (fone.replace(/\D/g, "").length < 10) return toast("Informe um telefone válido com DDD.", "erro");
 
-  const pedido = gerarProtocolo("PED");
-  $("#osNumber").textContent = pedido;
-  $("#osName").textContent = nome.split(" ")[0];
-  const t = totaisCarrinho();
-  $("#osTotal").textContent = dinheiro(t.total);
-
-  $("#coStepForm").classList.add("hidden");
-  $("#coStepSuccess").classList.remove("hidden");
-
-  salvarLS("patachic_cart", []);
-  cupomAtivo = null;
-  $("#couponInput").value = "";
-  $("#couponMsg").textContent = "";
-  renderCarrinho();
-  e.target.reset();
+  const btn = e.target.querySelector('button[type="submit"]');
+  btn.disabled = true;
+  try {
+    const ped = await apiPost("/pedidos", {
+      nome, email, fone,
+      cep: $("#coCep").value.trim(),
+      endereco: $("#coAddress").value.trim(),
+      pagamento: document.querySelector('input[name="pay"]:checked')?.value || "pix",
+      itens: getCarrinho().map((i) => ({ id: i.id, qtd: i.qtd })),
+      cupom: cupomAtivo?.codigo || null,
+    });
+    $("#osNumber").textContent = ped.numero;
+    $("#osName").textContent = nome.split(" ")[0];
+    $("#osTotal").textContent = dinheiro(ped.total);
+    $("#coStepForm").classList.add("hidden");
+    $("#coStepSuccess").classList.remove("hidden");
+    salvarLS("patachic_cart", []);
+    cupomAtivo = null;
+    $("#couponInput").value = "";
+    $("#couponMsg").textContent = "";
+    renderCarrinho();
+    e.target.reset();
+  } catch (err) {
+    toast(err.message, "erro");
+  } finally {
+    btn.disabled = false;
+  }
 }
 
-/* ---------------- Depoimentos ---------------- */
-
-function initDepoimentos() {
-  const track = $("#testiTrack");
-  const dots = $("#testiDots");
-  if (!track || !dots) return;
-
-  track.innerHTML = DEPOIMENTOS.map(
-    (d) => `
-    <div class="w-full flex-shrink-0 px-1">
-      <div class="card p-8 text-center max-w-2xl mx-auto">
-        ${estrelasHTML(5)}
-        <p class="font-display font-bold text-xl leading-relaxed mt-3">“${d.texto}”</p>
-        <div class="flex items-center justify-center gap-3 mt-5">
-          <div class="flex items-center justify-center font-display font-extrabold text-white text-lg" style="width:3rem;height:3rem;border-radius:999px;background:${d.cor}">${d.nome.charAt(0)}</div>
-          <div class="text-left">
-            <p class="font-extrabold">${d.nome}</p>
-            <p class="text-sm font-bold" style="color:#a8a29e">${d.pet}</p>
-          </div>
-        </div>
-      </div>
-    </div>`
-  ).join("");
-
-  dots.innerHTML = DEPOIMENTOS.map((_, i) => `<button class="testi-dot ${i === 0 ? "ativo" : ""}" data-dot="${i}" aria-label="Ver depoimento ${i + 1}"></button>`).join("");
-
-  let idx = 0;
-  let timer = null;
-  const irPara = (i) => {
-    idx = (i + DEPOIMENTOS.length) % DEPOIMENTOS.length;
-    track.style.transform = `translateX(-${idx * 100}%)`;
-    $$("#testiDots .testi-dot").forEach((dt, j) => dt.classList.toggle("ativo", j === idx));
-  };
-  const auto = () => {
-    clearInterval(timer);
-    timer = setInterval(() => irPara(idx + 1), 6000);
-  };
-
-  $$("#testiDots .testi-dot").forEach((dt) =>
-    dt.addEventListener("click", () => {
-      irPara(Number(dt.dataset.dot));
-      auto();
-    })
-  );
-  $("#testiPrev")?.addEventListener("click", () => {
-    irPara(idx - 1);
-    auto();
-  });
-  $("#testiNext")?.addEventListener("click", () => {
-    irPara(idx + 1);
-    auto();
-  });
-  $("#depoimentos")?.addEventListener("mouseenter", () => clearInterval(timer));
-  $("#depoimentos")?.addEventListener("mouseleave", auto);
-  auto();
-}
-
-/* ---------------- FAQ / modais genéricos / diversos ---------------- */
+/* ---------------- FAQ / modais / diversos ---------------- */
 
 function initFaq() {
   $$(".faq-item").forEach((item) => {
@@ -898,7 +819,7 @@ function initFaq() {
   });
 }
 
-function initModaisGenericos() {
+function initModais() {
   const bm = $("#bookingModal");
   $("#bmClose")?.addEventListener("click", () => {
     bm.classList.remove("aberto");
@@ -924,37 +845,66 @@ function initDiversos() {
   const ano = $("#yearNow");
   if (ano) ano.textContent = new Date().getFullYear();
 
-  $("#contactForm")?.addEventListener("submit", (e) => {
+  $("#newsForm")?.addEventListener("submit", async (e) => {
     e.preventDefault();
-    toast("Mensagem enviada! Retornamos em até 1 dia útil.");
-    e.target.reset();
+    const email = e.target.querySelector('input[type="email"]').value.trim();
+    if (!API_OK) return toast("Backend offline — tente novamente em instantes.", "erro");
+    try {
+      await apiPost("/newsletter", { email });
+      toast("Inscrição confirmada! Use o cupom <b>PATACHIC30</b>.");
+      e.target.reset();
+    } catch (err) {
+      toast(err.message, "erro");
+    }
   });
 
-  $("#newsForm")?.addEventListener("submit", (e) => {
-    e.preventDefault();
-    toast("Inscrição confirmada! Use o cupom <b>BEMVINDO10</b>.");
-    e.target.reset();
+  $("#offerCouponBtn")?.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText("PATACHIC30");
+      toast("Cupom <b>PATACHIC30</b> copiado! Aplique no carrinho.");
+    } catch {
+      toast("Seu cupom é <b>PATACHIC30</b>. Aplique no carrinho.", "info");
+    }
+    document.querySelector("#loja")?.scrollIntoView({ behavior: "smooth" });
   });
-
-  $$("[data-plano]").forEach((b) =>
-    b.addEventListener("click", () => {
-      const msg = encodeURIComponent(`Olá! Quero assinar o ${b.dataset.plano} do Clube PataChic. Pode me passar os detalhes?`);
-      window.open(`https://wa.me/${WHATSAPP}?text=${msg}`, "_blank");
-    })
-  );
 }
 
 /* ---------------- Boot ---------------- */
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   initHeader();
   initContadores();
+  initFaq();
+  initModais();
+  initDiversos();
+
+  try {
+    const status = await apiGet("/status");
+    API_OK = !!status.ok;
+  } catch {
+    API_OK = false;
+  }
+  $("#apiWarn")?.classList.toggle("hidden", API_OK);
+
+  if (API_OK) {
+    try {
+      [SERVICOS, PRODUTOS] = await Promise.all([apiGet("/servicos"), apiGet("/produtos")]);
+    } catch {
+      API_OK = false;
+      $("#apiWarn")?.classList.remove("hidden");
+    }
+  }
+  if (!SERVICOS.length) SERVICOS = FALLBACK_SERVICOS;
+  if (!PRODUTOS.length) {
+    // sem backend e sem fallback de produtos: mostra aviso na vitrine
+    $("#productsGrid").innerHTML = `<div class="col-span-full card p-10 text-center"><p class="font-display font-extrabold text-xl">Vitrine indisponível</p><p class="font-bold text-sm mt-1" style="color:#a89e83">Inicie o backend para carregar os produtos.</p></div>`;
+    $("#bestTrack").innerHTML = "";
+  }
+
+  if (SERVICOS.length && !$("#bkService").options.length) popularServicosSelect();
+  else popularServicosSelect();
   renderServicos();
   initAgendamento();
   initLoja();
   initCarrinho();
-  initDepoimentos();
-  initFaq();
-  initModaisGenericos();
-  initDiversos();
 });

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Área do Lojista — PataChic</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            creme: '#F4EDD8', papel: '#FFFDF6',
+            verde: { DEFAULT: '#14532D', escuro: '#0B3A1F', claro: '#1E7A44' },
+            dourado: { DEFAULT: '#C99B3F', claro: '#E4C87F' },
+            tinta: '#243024', suave: '#5F6B5F'
+          },
+          fontFamily: {
+            display: ['Archivo', 'Nunito', 'sans-serif'],
+            sans: ['Nunito', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="antialiased min-h-screen">
+  <header class="px-3 sm:px-5 pt-3">
+    <div class="barra-nav max-w-6xl mx-auto bg-white rounded-full pl-3 pr-4 py-2.5 flex items-center justify-between gap-3">
+      <a href="/" class="flex items-center gap-2.5">
+        <img src="assets/logo.svg" alt="Logotipo PataChic" width="38" height="38" class="rounded-xl">
+        <span class="font-display font-black text-lg">Pata<span style="color:#14532D">Chic</span>
+          <span class="hidden sm:inline font-sans font-bold text-sm" style="color:#a89e83">· área do lojista</span>
+        </span>
+      </a>
+      <div class="flex items-center gap-2">
+        <button id="logoutBtn" class="btn btn-linha !py-2 !px-4 text-sm hidden">Sair</button>
+        <a href="/" class="btn btn-verde !py-2 !px-4 text-sm">Ver loja</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+    <!-- Acesso -->
+    <div id="gate" class="card !rounded-[1.75rem] p-8 max-w-md mx-auto text-center">
+      <h1 class="font-display font-black text-2xl">Acesso restrito</h1>
+      <p class="font-bold text-sm mt-1" style="color:#5F6B5F">Informe o token de administrador para ver agendamentos, pedidos e contatos.</p>
+      <input id="tokenInput" class="campo mt-4 text-center" type="password" placeholder="Token de acesso" autocomplete="off">
+      <p id="gateErro" class="text-sm font-extrabold mt-2 hidden" style="color:#B91C1C">Token inválido.</p>
+      <button id="gateBtn" class="btn btn-verde w-full mt-4">Entrar</button>
+      <p class="text-xs font-bold mt-3" style="color:#a89e83">Token padrão de demonstração: <span class="underline">patachic-admin-123</span> (defina ADMIN_TOKEN para trocar).</p>
+    </div>
+
+    <!-- Painel -->
+    <div id="painel" class="hidden">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="card p-5"><p class="text-xs font-extrabold uppercase tracking-wide" style="color:#a89e83">Agend. ativos</p><p id="sumAg" class="font-display font-black text-3xl" style="color:#14532D">—</p></div>
+        <div class="card p-5"><p class="text-xs font-extrabold uppercase tracking-wide" style="color:#a89e83">Pedidos</p><p id="sumPed" class="font-display font-black text-3xl" style="color:#14532D">—</p></div>
+        <div class="card p-5"><p class="text-xs font-extrabold uppercase tracking-wide" style="color:#a89e83">Receita</p><p id="sumReceita" class="font-display font-black text-3xl" style="color:#14532D">—</p></div>
+        <div class="card p-5"><p class="text-xs font-extrabold uppercase tracking-wide" style="color:#a89e83">Newsletter</p><p id="sumNews" class="font-display font-black text-3xl" style="color:#14532D">—</p></div>
+      </div>
+
+      <div class="card !rounded-full px-2 py-2 mt-6 flex gap-1 overflow-x-auto sem-barra w-fit max-w-full">
+        <button class="aba ativa" data-aba="agendamentos">Agendamentos</button>
+        <button class="aba" data-aba="pedidos">Pedidos</button>
+        <button class="aba" data-aba="contatos">Contatos</button>
+        <button class="aba" data-aba="newsletter">Newsletter</button>
+      </div>
+
+      <div id="adminContent" class="card p-4 sm:p-6 mt-4 overflow-x-auto"></div>
+    </div>
+  </main>
+
+  <div id="toastWrap" style="bottom:1.25rem" aria-live="polite"></div>
+  <script src="js/admin.js" defer></script>
+</body>
+</html>
