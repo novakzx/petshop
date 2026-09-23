@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PataChic — Banho, Tosa & Boutique Pet | Vila Madalena, São Paulo</title>
+  <meta name="description" content="Agende banho e tosa online e compre ração, brinquedos, caminhas e produtos de higiene para cães e gatos. PataChic: o spa boutique do seu pet na Vila Madalena.">
+  <meta property="og:title" content="PataChic — Banho, Tosa & Boutique Pet">
+  <meta property="og:description" content="Agende a tosa do seu pet em 1 minuto e receba produtos premium em casa. Frete grátis acima de R$ 149.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/site/hero.jpg">
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            caramelo: { 100: '#FFEDD5', 200: '#FED7AA', 300: '#FDBA74', 400: '#FB923C', 500: '#F97316', 600: '#EA580C', 700: '#C2410C' },
+            petroleo: { 100: '#CCFBF1', 400: '#2DD4BF', 500: '#14B8A6', 600: '#0D9488', 700: '#0F766E', 800: '#115E59' },
+            baunilha: '#FFFBF3',
+            creme: '#FFF7ED',
+            cacau: { DEFAULT: '#292524', claro: '#57534E' },
+            petala: '#FB7185',
+            sol: '#FBBF24'
+          },
+          fontFamily: {
+            display: ['"Baloo 2"', 'Nunito', 'sans-serif'],
+            sans: ['Nunito', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="stylesheet" href="css/styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "PetStore",
+    "name": "PataChic — Banho, Tosa & Boutique Pet",
+    "description": "Banho, tosa e boutique de produtos premium para cães e gatos.",
+    "address": { "@type": "PostalAddress", "streetAddress": "Rua dos Ipês, 123", "addressLocality": "São Paulo", "addressRegion": "SP", "postalCode": "05428-010", "addressCountry": "BR" },
+    "telephone": "+55-11-3456-7890",
+    "openingHours": ["Mo-Fr 08:00-19:00", "Sa 08:00-14:00"],
+    "priceRange": "$$"
+  }
+  </script>
+</head>
+<body class="antialiased">
+
+  <!-- Faixa promocional -->
+  <div class="text-center text-sm font-extrabold text-white px-4 py-2.5" style="background:linear-gradient(90deg,#0f766e,#14b8a6,#0f766e)">
+    Frete grátis acima de R$ 149 &nbsp;·&nbsp; 10% OFF na 1ª compra com o cupom <span class="underline underline-offset-2">BEMVINDO10</span>
+  </div>
+
+  <!-- Cabeçalho -->
+  <header id="siteHeader" class="sticky top-0 z-50" style="background:rgba(255,251,243,0.92);backdrop-filter:blur(10px)">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-4 py-3">
+      <a href="#inicio" class="flex items-center gap-2.5" aria-label="PataChic — início">
+        <img src="assets/logo.svg" alt="Logotipo PataChic" width="48" height="48" class="rounded-2xl shadow-md">
+        <span class="leading-none">
+          <span class="font-display font-extrabold text-2xl tracking-tight">Pata<span style="color:#f97316">Chic</span></span>
+          <span class="block text-[0.62rem] font-extrabold tracking-[0.22em]" style="color:#a8a29e">BANHO · TOSA · BOUTIQUE</span>
+        </span>
+      </a>
+      <nav class="hidden lg:flex items-center gap-7" aria-label="Navegação principal">
+        <a class="nav-link" href="#inicio">Início</a>
+        <a class="nav-link" href="#servicos">Serviços</a>
+        <a class="nav-link" href="#agendar">Agendar</a>
+        <a class="nav-link" href="#loja">Loja</a>
+        <a class="nav-link" href="#clube">Clube</a>
+        <a class="nav-link" href="#contato">Contato</a>
+      </nav>
+      <div class="flex items-center gap-2.5">
+        <button id="cartBtn" class="relative flex items-center gap-2 font-extrabold text-sm px-4 py-2.5 rounded-full bg-white border-2 hover:border-caramelo-400 transition" style="border-color:#f3e7d7" aria-label="Abrir carrinho">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#292524" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1.5"/><circle cx="19" cy="21" r="1.5"/><path d="M2 3h3l2.6 12.5a1 1 0 0 0 1 .5h8.7a1 1 0 0 0 1-.8L21 7H6"/></svg>
+          <span class="hidden sm:inline">Carrinho</span>
+          <span id="cartCount" class="hidden absolute -top-2 -right-2 text-white text-xs font-black rounded-full min-w-[1.4rem] h-[1.4rem] px-1 flex items-center justify-center" style="background:#e11d48">0</span>
+        </button>
+        <a href="#agendar" class="btn btn-caramelo !py-2.5 !px-5 text-sm hidden md:inline-flex">Agendar tosa</a>
+        <button id="menuBtn" class="lg:hidden p-2.5 rounded-xl bg-white border-2" style="border-color:#f3e7d7" aria-label="Abrir menu" aria-expanded="false">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#292524" stroke-width="2.5" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav id="mobileMenu" class="hidden lg:hidden border-t px-4 py-3 flex flex-col gap-1 bg-baunilha" style="border-color:#f3e7d7" aria-label="Menu móvel">
+      <a class="font-extrabold py-2.5 px-3 rounded-xl hover:bg-creme" href="#inicio">Início</a>
+      <a class="font-extrabold py-2.5 px-3 rounded-xl hover:bg-creme" href="#servicos">Serviços</a>
+      <a class="font-extrabold py-2.5 px-3 rounded-xl hover:bg-creme" href="#agendar">Agendar</a>
+      <a class="font-extrabold py-2.5 px-3 rounded-xl hover:bg-creme" href="#loja">Loja</a>
+      <a class="font-extrabold py-2.5 px-3 rounded-xl hover:bg-creme" href="#clube">Clube</a>
+      <a class="font-extrabold py-2.5 px-3 rounded-xl hover:bg-creme" href="#contato">Contato</a>
+    </nav>
+  </header>
+
+  <main id="inicio">
+    <!-- HERO -->
+    <section class="relative overflow-hidden paw-pattern">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-12 pb-20 lg:pt-16 lg:pb-24 grid lg:grid-cols-2 gap-12 items-center">
+        <div class="reveal in">
+          <span class="inline-flex items-center gap-2 bg-white border-2 font-extrabold text-sm px-4 py-1.5 rounded-full shadow-sm" style="border-color:#f3e7d7;color:#0f766e">
+            <span class="relative flex h-2.5 w-2.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60" style="background:#14b8a6"></span><span class="relative inline-flex rounded-full h-2.5 w-2.5" style="background:#0f766e"></span></span>
+            Agenda aberta · Vila Madalena, SP
+          </span>
+          <h1 class="font-display font-extrabold text-5xl sm:text-6xl leading-[1.05] mt-5 tracking-tight">
+            Seu pet merece um <span style="color:#f97316">dia de spa</span>
+          </h1>
+          <p class="text-lg font-semibold mt-4 max-w-lg" style="color:#57534e">
+            Banho, tosa e boutique premium para cães e gatos. Agende online em 1 minuto e receba os melhores produtos em casa.
+          </p>
+          <div class="flex flex-wrap gap-3 mt-7">
+            <a href="#agendar" class="btn btn-caramelo">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+              Agendar tosa
+            </a>
+            <a href="#loja" class="btn btn-contorno">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h15l-1.5 9h-12z"/><path d="M6 7L5 3H2"/><circle cx="9" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/></svg>
+              Ver produtos
+            </a>
+          </div>
+          <div class="flex items-center gap-3 mt-7">
+            <div class="flex -space-x-2.5">
+              <span class="w-10 h-10 rounded-full border-[3px] border-white flex items-center justify-center font-display font-extrabold text-white" style="background:#f97316">M</span>
+              <span class="w-10 h-10 rounded-full border-[3px] border-white flex items-center justify-center font-display font-extrabold text-white" style="background:#0f766e">C</span>
+              <span class="w-10 h-10 rounded-full border-[3px] border-white flex items-center justify-center font-display font-extrabold text-white" style="background:#7c3aed">F</span>
+              <span class="w-10 h-10 rounded-full border-[3px] border-white flex items-center justify-center font-display font-extrabold text-white" style="background:#db2777">R</span>
+            </div>
+            <div class="text-sm font-bold" style="color:#57534e">
+              <span class="estrelas text-base">★★★★★</span>
+              <span class="font-extrabold text-cacau">4.9</span> · 2.300+ avaliações de tutores
+            </div>
+          </div>
+        </div>
+
+        <div class="relative reveal in reveal-atraso-1">
+          <div class="absolute -inset-4 rounded-[3rem] rotate-3" style="background:linear-gradient(135deg,#fed7aa,#fdba74)"></div>
+          <img src="assets/site/hero.jpg" alt="Cãozinho feliz sendo tosado no salão PataChic" class="relative rounded-[2.5rem] w-full shadow-2xl -rotate-2" style="aspect-ratio:4/3.4;object-fit:cover">
+          <div class="absolute -left-3 sm:-left-8 top-8 card px-4 py-3 flex items-center gap-3 anim-flutuar shadow-xl">
+            <span class="relative flex h-3 w-3"><span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60" style="background:#34d399"></span><span class="relative inline-flex rounded-full h-3 w-3" style="background:#059669"></span></span>
+            <div class="text-sm"><p class="font-extrabold">Tosa higiênica hoje</p><p class="font-bold" style="color:#0f766e">3 horários livres</p></div>
+          </div>
+          <div class="absolute -right-2 sm:-right-6 bottom-10 card px-4 py-3 anim-flutuar-2 shadow-xl">
+            <p class="font-display font-extrabold text-2xl" style="color:#ea580c">+12 mil</p>
+            <p class="text-sm font-bold" style="color:#57534e">pets atendidos</p>
+          </div>
+        </div>
+      </div>
+      <svg class="divisor-onda" viewBox="0 0 1440 70" preserveAspectRatio="none" style="color:#ffffff"><path fill="currentColor" d="M0,0 C240,70 480,70 720,35 C960,0 1200,0 1440,35 L1440,70 L0,70 Z"></path></svg>
+    </section>
+
+    <!-- ESTATÍSTICAS -->
+    <section class="bg-white border-b" style="border-color:#f3e7d7">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-10 grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+        <div class="reveal"><p class="font-display font-extrabold text-4xl" style="color:#f97316"><span class="contador" data-contar="12400">0</span>+</p><p class="font-bold text-sm" style="color:#78716c">pets atendidos</p></div>
+        <div class="reveal reveal-atraso-1"><p class="font-display font-extrabold text-4xl" style="color:#0f766e"><span class="contador" data-contar="8">0</span> anos</p><p class="font-bold text-sm" style="color:#78716c">de experiência</p></div>
+        <div class="reveal reveal-atraso-2"><p class="font-display font-extrabold text-4xl" style="color:#7c3aed"><span class="contador" data-contar="350">0</span>+</p><p class="font-bold text-sm" style="color:#78716c">produtos na boutique</p></div>
+        <div class="reveal reveal-atraso-3"><p class="font-display font-extrabold text-4xl" style="color:#d97706">4.9<span class="text-2xl"> ★</span></p><p class="font-bold text-sm" style="color:#78716c">avaliação média</p></div>
+      </div>
+    </section>
+
+    <!-- SERVIÇOS -->
+    <section id="servicos" class="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 py-16 lg:py-20">
+      <div class="text-center max-w-2xl mx-auto reveal">
+        <p class="font-extrabold text-sm uppercase tracking-[0.2em]" style="color:#0f766e">Nossos serviços</p>
+        <h2 class="font-display font-extrabold text-4xl sm:text-5xl mt-2 tracking-tight">Do banho ao <span style="color:#f97316">day care</span></h2>
+        <p class="font-semibold mt-3" style="color:#57534e">Preço transparente, produtos premium e profissionais que tratam seu pet pelo nome.</p>
+      </div>
+      <div id="servicesGrid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-10"></div>
+    </section>
+
+    <!-- COMO FUNCIONA -->
+    <section class="paw-pattern border-y" style="border-color:#f3e7d7">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-14">
+        <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-center tracking-tight reveal">Agendar é <span style="color:#0f766e">facinho</span></h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-8">
+          <div class="card p-6 reveal"><div class="passo-numero" style="background:linear-gradient(135deg,#fb923c,#ea580c)">1</div><h3 class="font-display font-bold text-lg mt-3">Escolha o serviço</h3><p class="text-sm font-semibold mt-1" style="color:#78716c">Banho, tosa, spa ou day care — do jeito que seu pet precisa.</p></div>
+          <div class="card p-6 reveal reveal-atraso-1"><div class="passo-numero" style="background:linear-gradient(135deg,#2dd4bf,#0f766e)">2</div><h3 class="font-display font-bold text-lg mt-3">Pegue o melhor horário</h3><p class="text-sm font-semibold mt-1" style="color:#78716c">Veja a agenda em tempo real e escolha dia e hora.</p></div>
+          <div class="card p-6 reveal reveal-atraso-2"><div class="passo-numero" style="background:linear-gradient(135deg,#a78bfa,#7c3aed)">3</div><h3 class="font-display font-bold text-lg mt-3">Receba a confirmação</h3><p class="text-sm font-semibold mt-1" style="color:#78716c">Protocolo na hora e lembrete no WhatsApp antes do atendimento.</p></div>
+          <div class="card p-6 reveal reveal-atraso-3"><div class="passo-numero" style="background:linear-gradient(135deg,#fb7185,#e11d48)">4</div><h3 class="font-display font-bold text-lg mt-3">Pet desfilando</h3><p class="text-sm font-semibold mt-1" style="color:#78716c">Busque seu pet cheiroso, com foto do antes e depois.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AGENDAMENTO -->
+    <section id="agendar" class="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 py-16 lg:py-20">
+      <div class="text-center max-w-2xl mx-auto reveal">
+        <p class="font-extrabold text-sm uppercase tracking-[0.2em]" style="color:#ea580c">Agendamento online</p>
+        <h2 class="font-display font-extrabold text-4xl sm:text-5xl mt-2 tracking-tight">Reserve o horário do <span style="color:#0f766e">seu pet</span></h2>
+        <p class="font-semibold mt-3" style="color:#57534e">Sem cadastro, sem espera no telefone. Leva menos de 1 minuto.</p>
+      </div>
+
+      <div class="grid lg:grid-cols-5 gap-6 mt-10">
+        <form id="bookingForm" class="card p-6 sm:p-8 lg:col-span-3 reveal" novalidate>
+          <div class="grid sm:grid-cols-2 gap-5">
+            <div>
+              <label class="rotulo" for="bkPet">Nome do pet *</label>
+              <input class="campo" id="bkPet" type="text" placeholder="Ex.: Thor" maxlength="30" autocomplete="off">
+            </div>
+            <div>
+              <span class="rotulo">Espécie</span>
+              <div class="flex gap-2">
+                <label class="opcao-check"><input type="radio" name="especie" value="Cão" checked><span>Cão</span></label>
+                <label class="opcao-check"><input type="radio" name="especie" value="Gato"><span>Gato</span></label>
+              </div>
+            </div>
+            <div class="sm:col-span-2">
+              <span class="rotulo">Porte do pet</span>
+              <div class="flex flex-wrap gap-2">
+                <label class="opcao-check verde"><input type="radio" name="porte" value="P" checked><span>Pequeno · até 10 kg</span></label>
+                <label class="opcao-check verde"><input type="radio" name="porte" value="M"><span>Médio · 10–25 kg</span></label>
+                <label class="opcao-check verde"><input type="radio" name="porte" value="G"><span>Grande · 25 kg+</span></label>
+              </div>
+            </div>
+            <div>
+              <label class="rotulo" for="bkService">Serviço *</label>
+              <select class="campo" id="bkService"></select>
+            </div>
+            <div>
+              <label class="rotulo" for="bkPro">Profissional</label>
+              <select class="campo" id="bkPro"></select>
+            </div>
+            <div>
+              <label class="rotulo" for="bkDate">Data *</label>
+              <input class="campo" id="bkDate" type="date">
+            </div>
+            <div>
+              <label class="rotulo" for="bkTutor">Seu nome (tutor) *</label>
+              <input class="campo" id="bkTutor" type="text" placeholder="Ex.: Mariana Lima" maxlength="40" autocomplete="name">
+            </div>
+            <div class="sm:col-span-2">
+              <span class="rotulo">Horário *</span>
+              <div id="slotsWrap" class="grid grid-cols-4 sm:grid-cols-7 gap-2"></div>
+              <p id="slotsAviso" class="text-xs font-bold mt-2" style="color:#b45309"></p>
+            </div>
+            <div>
+              <label class="rotulo" for="bkPhone">WhatsApp *</label>
+              <input class="campo" id="bkPhone" type="tel" placeholder="(11) 98765-4321" inputmode="numeric" autocomplete="tel">
+            </div>
+            <div>
+              <label class="rotulo" for="bkNotes">Observações</label>
+              <input class="campo" id="bkNotes" type="text" placeholder="Alergias, medos, preferências…" maxlength="120">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-petroleo w-full mt-7 text-lg">
+            Confirmar agendamento
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+          <p class="text-center text-xs font-bold mt-3" style="color:#a8a29e">Cancelamento grátis até 3h antes pelo WhatsApp.</p>
+        </form>
+
+        <aside class="lg:col-span-2 flex flex-col gap-6">
+          <div class="card p-6 reveal reveal-atraso-1" style="background:linear-gradient(180deg,#fff,#fff7ed)">
+            <h3 class="font-display font-bold text-lg">Resumo do pedido</h3>
+            <div id="bkEstimate" class="mt-3"></div>
+          </div>
+          <div class="reveal reveal-atraso-2">
+            <h3 class="font-display font-bold text-lg mb-3">Meus agendamentos</h3>
+            <div id="myBookings" class="flex flex-col gap-3"></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- LOJA -->
+    <section id="loja" class="scroll-mt-24 border-y paw-pattern" style="border-color:#f3e7d7">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-16 lg:py-20">
+        <div class="text-center max-w-2xl mx-auto reveal">
+          <p class="font-extrabold text-sm uppercase tracking-[0.2em]" style="color:#0f766e">Boutique PataChic</p>
+          <h2 class="font-display font-extrabold text-4xl sm:text-5xl mt-2 tracking-tight">Tudo para o seu <span style="color:#f97316">melhor amigo</span></h2>
+          <p class="font-semibold mt-3" style="color:#57534e">Curadoria de produtos testados e aprovados pelos nossos próprios pets.</p>
+        </div>
+
+        <div class="card p-4 sm:p-5 mt-8 flex flex-col lg:flex-row gap-4 lg:items-center reveal">
+          <div class="relative flex-1">
+            <svg class="absolute left-4 top-1/2 -translate-y-1/2" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a8a29e" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            <input id="searchInput" class="campo !pl-11" type="search" placeholder="Buscar ração, brinquedo, caminha…" autocomplete="off">
+          </div>
+          <div class="flex items-center gap-2">
+            <label for="sortSelect" class="text-sm font-extrabold whitespace-nowrap" style="color:#78716c">Ordenar:</label>
+            <select id="sortSelect" class="campo !w-auto font-bold text-sm">
+              <option value="rel">Relevância</option>
+              <option value="asc">Menor preço</option>
+              <option value="desc">Maior preço</option>
+              <option value="rating">Melhor avaliados</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="pillsWrap" class="flex gap-2.5 mt-5 overflow-x-auto pb-2 reveal"></div>
+        <p id="resultCount" class="text-sm font-bold mt-3" style="color:#a8a29e"></p>
+        <div id="productsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-4"></div>
+      </div>
+    </section>
+
+    <!-- CLUBE -->
+    <section id="clube" class="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 py-16 lg:py-20">
+      <div class="text-center max-w-2xl mx-auto reveal">
+        <p class="font-extrabold text-sm uppercase tracking-[0.2em]" style="color:#7c3aed">Clube PataChic</p>
+        <h2 class="font-display font-extrabold text-4xl sm:text-5xl mt-2 tracking-tight">Banho todo mês, <span style="color:#f97316">sem pesar no bolso</span></h2>
+        <p class="font-semibold mt-3" style="color:#57534e">Assinatura mensal com horários prioritários, leva e traz grátis e 10% OFF na boutique.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-5 mt-10 items-stretch">
+        <div class="card card-servico p-7 flex flex-col reveal">
+          <h3 class="font-display font-bold text-xl">Essencial</h3>
+          <p class="font-display font-extrabold text-4xl mt-2">R$ 54<span class="text-lg">,90/mês</span></p>
+          <ul class="mt-4 space-y-2.5 text-sm font-bold flex-1" style="color:#57534e">
+            <li>✓ 1 banho completo por mês</li>
+            <li>✓ Corte de unhas incluso</li>
+            <li>✓ Lembrete de agendamento</li>
+          </ul>
+          <button class="btn btn-contorno w-full mt-6" data-plano="Plano Essencial">Assinar</button>
+        </div>
+        <div class="card p-7 flex flex-col relative reveal reveal-atraso-1" style="border:3px solid #f97316;box-shadow:0 20px 50px -15px rgba(249,115,22,0.5)">
+          <span class="selo selo-top absolute -top-3.5 left-1/2 -translate-x-1/2">Mais assinado</span>
+          <h3 class="font-display font-bold text-xl">Completo</h3>
+          <p class="font-display font-extrabold text-4xl mt-2" style="color:#ea580c">R$ 139<span class="text-lg">,90/mês</span></p>
+          <ul class="mt-4 space-y-2.5 text-sm font-bold flex-1" style="color:#57534e">
+            <li>✓ 2 banhos completos por mês</li>
+            <li>✓ 1 tosa higiênica por mês</li>
+            <li>✓ Leva e traz grátis</li>
+            <li>✓ 10% OFF em toda a boutique</li>
+          </ul>
+          <button class="btn btn-caramelo w-full mt-6" data-plano="Plano Completo">Assinar</button>
+        </div>
+        <div class="card card-servico p-7 flex flex-col reveal reveal-atraso-2">
+          <h3 class="font-display font-bold text-xl">VIP</h3>
+          <p class="font-display font-extrabold text-4xl mt-2">R$ 289<span class="text-lg">,90/mês</span></p>
+          <ul class="mt-4 space-y-2.5 text-sm font-bold flex-1" style="color:#57534e">
+            <li>✓ 4 banhos completos por mês</li>
+            <li>✓ 1 tosa completa + 1 spa</li>
+            <li>✓ Horários prioritários</li>
+            <li>✓ 15% OFF em toda a boutique</li>
+          </ul>
+          <button class="btn btn-contorno w-full mt-6" data-plano="Plano VIP">Assinar</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALERIA -->
+    <section class="border-y paw-pattern" style="border-color:#f3e7d7">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-16">
+        <div class="text-center max-w-2xl mx-auto reveal">
+          <p class="font-extrabold text-sm uppercase tracking-[0.2em]" style="color:#db2777">Antes e depois? Só depois!</p>
+          <h2 class="font-display font-extrabold text-4xl sm:text-5xl mt-2 tracking-tight">Clientes que saíram daqui <span style="color:#f97316">desfilando</span></h2>
+        </div>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+          <figure class="galeria-item relative rounded-3xl overflow-hidden shadow-lg reveal" style="aspect-ratio:3/4">
+            <img class="galeria-img w-full h-full" style="object-fit:cover" src="assets/site/cao-lab.jpg" alt="Filhote de labrador sorrindo após o banho" loading="lazy">
+            <figcaption class="galeria-legenda absolute inset-x-0 bottom-0 p-4 text-white font-display font-bold" style="background:linear-gradient(transparent,rgba(41,37,36,0.8))">Thor · pós-banho</figcaption>
+          </figure>
+          <figure class="galeria-item relative rounded-3xl overflow-hidden shadow-lg reveal reveal-atraso-1" style="aspect-ratio:3/4">
+            <img class="galeria-img w-full h-full" style="object-fit:cover" src="assets/site/cao-pb.jpg" alt="Cadela sorrindo com a língua de fora" loading="lazy">
+            <figcaption class="galeria-legenda absolute inset-x-0 bottom-0 p-4 text-white font-display font-bold" style="background:linear-gradient(transparent,rgba(41,37,36,0.8))">Luna · dia de spa</figcaption>
+          </figure>
+          <figure class="galeria-item relative rounded-3xl overflow-hidden shadow-lg reveal reveal-atraso-2" style="aspect-ratio:3/4">
+            <img class="galeria-img w-full h-full" style="object-fit:cover" src="assets/site/cao-boston.jpg" alt="Boston terrier feliz após a tosa" loading="lazy">
+            <figcaption class="galeria-legenda absolute inset-x-0 bottom-0 p-4 text-white font-display font-bold" style="background:linear-gradient(transparent,rgba(41,37,36,0.8))">Bolt · tosa nova</figcaption>
+          </figure>
+          <figure class="galeria-item relative rounded-3xl overflow-hidden shadow-lg reveal reveal-atraso-3" style="aspect-ratio:3/4">
+            <img class="galeria-img w-full h-full" style="object-fit:cover" src="assets/produtos/colchonete.jpg" alt="Poodle relaxado no colchonete novo" loading="lazy">
+            <figcaption class="galeria-legenda absolute inset-x-0 bottom-0 p-4 text-white font-display font-bold" style="background:linear-gradient(transparent,rgba(41,37,36,0.8))">Nina · soneca pós-spa</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- DEPOIMENTOS -->
+    <section id="depoimentos" class="scroll-mt-24 max-w-5xl mx-auto px-4 sm:px-6 py-16 lg:py-20">
+      <div class="text-center reveal">
+        <p class="font-extrabold text-sm uppercase tracking-[0.2em]" style="color:#0f766e">Quem confia, recomenda</p>
+        <h2 class="font-display font-extrabold text-4xl sm:text-5xl mt-2 tracking-tight">Tutores <span style="color:#f97316">apaixonados</span></h2>
+      </div>
+      <div class="relative mt-8 reveal">
+        <div class="overflow-hidden">
+          <div id="testiTrack" class="flex"></div>
+        </div>
+        <div class="flex items-center justify-center gap-4 mt-6">
+          <button id="testiPrev" class="qtd-btn !w-10 !h-10 !text-lg" aria-label="Depoimento anterior">‹</button>
+          <div id="testiDots" class="flex items-center gap-2"></div>
+          <button id="testiNext" class="qtd-btn !w-10 !h-10 !text-lg" aria-label="Próximo depoimento">›</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="border-t paw-pattern" style="border-color:#f3e7d7">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 py-16">
+        <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-center tracking-tight reveal">Perguntas <span style="color:#0f766e">frequentes</span></h2>
+        <div class="flex flex-col gap-3 mt-8">
+          <div class="faq-item card overflow-hidden reveal">
+            <button class="faq-q w-full flex items-center justify-between gap-4 text-left font-display font-bold text-lg p-5">Preciso agendar ou posso chegar de surpresa?<svg class="faq-seta" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+            <div class="faq-resposta"><p class="px-5 pb-5 text-sm font-semibold" style="color:#57534e">Recomendamos agendar pelo site para garantir o horário, mas atendemos encaixes quando há disponibilidade. Chame no WhatsApp que confirmamos na hora.</p></div>
+          </div>
+          <div class="faq-item card overflow-hidden reveal">
+            <button class="faq-q w-full flex items-center justify-between gap-4 text-left font-display font-bold text-lg p-5">Vocês atendem gatos?<svg class="faq-seta" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+            <div class="faq-resposta"><p class="px-5 pb-5 text-sm font-semibold" style="color:#57534e">Sim! Temos sala exclusiva para felinos, sem contato com cães, e equipe treinada em manejo gentil (cat friendly). Banho e tosa higiênica para gatos com hora marcada.</p></div>
+          </div>
+          <div class="faq-item card overflow-hidden reveal">
+            <button class="faq-q w-full flex items-center justify-between gap-4 text-left font-display font-bold text-lg p-5">Existe serviço de leva e traz?<svg class="faq-seta" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+            <div class="faq-resposta"><p class="px-5 pb-5 text-sm font-semibold" style="color:#57534e">Sim, em transporte climatizado com caixas individuais. Grátis para assinantes do Clube e R$ 19,90 por trecho para os demais bairros atendidos.</p></div>
+          </div>
+          <div class="faq-item card overflow-hidden reveal">
+            <button class="faq-q w-full flex items-center justify-between gap-4 text-left font-display font-bold text-lg p-5">Quais são as formas de pagamento?<svg class="faq-seta" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+            <div class="faq-resposta"><p class="px-5 pb-5 text-sm font-semibold" style="color:#57534e">Pix, cartões de crédito e débito. Na loja online, parcelamos em até 3x sem juros. No salão, o pagamento é feito na retirada do pet.</p></div>
+          </div>
+          <div class="faq-item card overflow-hidden reveal">
+            <button class="faq-q w-full flex items-center justify-between gap-4 text-left font-display font-bold text-lg p-5">A partir de que idade o filhote pode tosar?<svg class="faq-seta" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+            <div class="faq-resposta"><p class="px-5 pb-5 text-sm font-semibold" style="color:#57534e">Após o protocolo vacinal completo (em geral, a partir de 4 meses, com liberação do veterinário). A primeira visita é uma adaptação tranquila, sem pressa.</p></div>
+          </div>
+          <div class="faq-item card overflow-hidden reveal">
+            <button class="faq-q w-full flex items-center justify-between gap-4 text-left font-display font-bold text-lg p-5">Como cancelo ou remarco um horário?<svg class="faq-seta" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+            <div class="faq-resposta"><p class="px-5 pb-5 text-sm font-semibold" style="color:#57534e">Direto na seção “Meus agendamentos” aqui no site ou pelo WhatsApp, sem custo até 3h antes do atendimento.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTATO -->
+    <section id="contato" class="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 py-16 lg:py-20">
+      <div class="text-center max-w-2xl mx-auto reveal">
+        <p class="font-extrabold text-sm uppercase tracking-[0.2em]" style="color:#ea580c">Visite-nos</p>
+        <h2 class="font-display font-extrabold text-4xl sm:text-5xl mt-2 tracking-tight">Passe para um <span style="color:#0f766e">au-lá</span></h2>
+      </div>
+      <div class="grid lg:grid-cols-2 gap-6 mt-10">
+        <div class="card p-7 reveal">
+          <h3 class="font-display font-bold text-xl">PataChic Vila Madalena</h3>
+          <ul class="mt-4 space-y-3.5 text-sm font-bold" style="color:#57534e">
+            <li class="flex gap-3"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Rua dos Ipês, 123 — Vila Madalena, São Paulo/SP</li>
+            <li class="flex gap-3"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8.1 9.5a16 16 0 0 0 6.4 6.4l1.1-1.1a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"/></svg>(11) 3456-7890 · WhatsApp (11) 98765-4321</li>
+            <li class="flex gap-3"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M2 7l10 6 10-6"/></svg>contato@patachic.com.br</li>
+            <li class="flex gap-3"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Seg–Sex 8h às 19h · Sáb 8h às 14h · Dom fechado</li>
+          </ul>
+          <div class="rounded-2xl overflow-hidden mt-5 border-2" style="border-color:#f3e7d7">
+            <iframe class="mapa-frame" title="Mapa da PataChic na Vila Madalena" loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=-46.6960%2C-23.5650%2C-46.6660%2C-23.5470&layer=mapnik&marker=-23.5560%2C-46.6810"></iframe>
+          </div>
+        </div>
+        <form id="contactForm" class="card p-7 reveal reveal-atraso-1">
+          <h3 class="font-display font-bold text-xl">Fale com a gente</h3>
+          <p class="text-sm font-semibold mt-1" style="color:#78716c">Dúvidas, sugestões ou parcerias: respondemos em até 1 dia útil.</p>
+          <div class="grid sm:grid-cols-2 gap-4 mt-5">
+            <div><label class="rotulo" for="ctNome">Nome</label><input class="campo" id="ctNome" type="text" placeholder="Seu nome" required></div>
+            <div><label class="rotulo" for="ctEmail">E-mail</label><input class="campo" id="ctEmail" type="email" placeholder="voce@email.com" required></div>
+          </div>
+          <div class="mt-4"><label class="rotulo" for="ctAssunto">Assunto</label>
+            <select class="campo" id="ctAssunto"><option>Dúvida sobre serviços</option><option>Dúvida sobre a loja</option><option>Clube PataChic</option><option>Parcerias</option><option>Outro</option></select>
+          </div>
+          <div class="mt-4"><label class="rotulo" for="ctMsg">Mensagem</label><textarea class="campo" id="ctMsg" rows="4" placeholder="Como podemos ajudar?" required></textarea></div>
+          <button type="submit" class="btn btn-petroleo w-full mt-5">Enviar mensagem</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- RODAPÉ -->
+  <footer class="text-white" style="background:#1c1917">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div>
+        <div class="flex items-center gap-2.5">
+          <img src="assets/logo.svg" alt="Logotipo PataChic" width="44" height="44" class="rounded-xl">
+          <span class="font-display font-extrabold text-2xl">Pata<span style="color:#fb923c">Chic</span></span>
+        </div>
+        <p class="text-sm font-semibold mt-3" style="color:#a8a29e">O spa boutique do seu pet na Vila Madalena. Banho, tosa e produtos premium desde 2018.</p>
+        <div class="flex gap-2.5 mt-4">
+          <a href="#" aria-label="Instagram" class="w-10 h-10 rounded-full flex items-center justify-center hover:opacity-80 transition" style="background:#292524"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="#fb923c" stroke="none"/></svg></a>
+          <a href="#" aria-label="Facebook" class="w-10 h-10 rounded-full flex items-center justify-center hover:opacity-80 transition" style="background:#292524"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fb923c"><path d="M14 8h3V4.5h-3c-2.5 0-4 1.7-4 4V11H7v3.5h3V21h3.5v-6.5h3l.5-3.5h-3.5V8.7c0-.4.3-.7.5-.7z"/></svg></a>
+          <a href="#" aria-label="TikTok" class="w-10 h-10 rounded-full flex items-center justify-center hover:opacity-80 transition" style="background:#292524"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fb923c"><path d="M16.5 3c.4 2.3 1.9 3.8 4.3 4v3c-1.6 0-3-.5-4.3-1.3v6.6c0 3.5-2.6 6-6 6-3.3 0-6-2.6-6-6s2.7-6 6-6c.3 0 .7 0 1 .1v3.1c-.3-.1-.7-.2-1-.2-1.6 0-2.9 1.3-2.9 3s1.3 3 2.9 3c1.7 0 3-1.4 3-3.2V3h3z"/></svg></a>
+        </div>
+      </div>
+      <nav aria-label="Links do rodapé">
+        <h4 class="font-display font-bold text-lg">Navegue</h4>
+        <ul class="mt-3 space-y-2.5 text-sm font-bold" style="color:#a8a29e">
+          <li><a class="hover:text-white transition" href="#servicos">Serviços</a></li>
+          <li><a class="hover:text-white transition" href="#agendar">Agendar horário</a></li>
+          <li><a class="hover:text-white transition" href="#loja">Boutique</a></li>
+          <li><a class="hover:text-white transition" href="#clube">Clube PataChic</a></li>
+          <li><a class="hover:text-white transition" href="#depoimentos">Depoimentos</a></li>
+        </ul>
+      </nav>
+      <div>
+        <h4 class="font-display font-bold text-lg">Atendimento</h4>
+        <ul class="mt-3 space-y-2.5 text-sm font-bold" style="color:#a8a29e">
+          <li>Seg–Sex · 8h às 19h</li>
+          <li>Sábado · 8h às 14h</li>
+          <li>Domingo · fechado</li>
+          <li class="pt-1">(11) 3456-7890</li>
+          <li>contato@patachic.com.br</li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-display font-bold text-lg">Novidades + 10% OFF</h4>
+        <p class="text-sm font-semibold mt-2" style="color:#a8a29e">Cadastre seu e-mail e ganhe o cupom BEMVINDO10.</p>
+        <form id="newsForm" class="mt-3 flex gap-2">
+          <input class="campo !bg-[#292524] !border-[#44403c] !text-white flex-1" type="email" placeholder="Seu e-mail" required aria-label="E-mail para novidades">
+          <button class="btn btn-caramelo !px-4" type="submit" aria-label="Assinar novidades">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </form>
+        <div class="flex flex-wrap gap-2 mt-4">
+          <span class="text-xs font-black px-2.5 py-1 rounded-md" style="background:#292524;color:#d6d3d1">PIX</span>
+          <span class="text-xs font-black px-2.5 py-1 rounded-md" style="background:#292524;color:#d6d3d1">VISA</span>
+          <span class="text-xs font-black px-2.5 py-1 rounded-md" style="background:#292524;color:#d6d3d1">MASTER</span>
+          <span class="text-xs font-black px-2.5 py-1 rounded-md" style="background:#292524;color:#d6d3d1">ELO</span>
+        </div>
+      </div>
+    </div>
+    <div class="border-t" style="border-color:#292524">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs font-bold" style="color:#78716c">
+        <p>© <span id="yearNow">2026</span> PataChic Petshop · CNPJ 00.000.000/0001-00 · Feito com carinho em São Paulo</p>
+        <p>Fotos: acervo PataChic, Pexels e parceiros</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Botão WhatsApp -->
+  <a href="https://wa.me/5511987654321?text=Ol%C3%A1!%20Quero%20falar%20com%20a%20PataChic." target="_blank" rel="noopener" aria-label="Falar no WhatsApp"
+     class="fixed bottom-5 right-5 z-40 w-14 h-14 rounded-full flex items-center justify-center shadow-2xl hover:scale-105 transition" style="background:#25d366">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.6-6.1c-.3-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.3-.6.8-.8 1-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4 0-.5.1-.7l.4-.5c.1-.2.1-.3 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.2-.7.6-.9 1.1-.6 2.7.1 3.9 1.2 2.1 2.9 3.4 5 4.3.6.2 1 .2 1.4.1.4-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2 0-.1-.2-.1-.5-.3z"/></svg>
+  </a>
+
+  <!-- Carrinho -->
+  <div id="cartOverlay" class="overlay"></div>
+  <aside id="cartDrawer" class="gaveta" aria-label="Carrinho de compras">
+    <div class="flex items-center justify-between p-5 border-b-2" style="border-color:#f3e7d7">
+      <h3 class="font-display font-extrabold text-xl">Seu carrinho</h3>
+      <button id="closeCart" class="qtd-btn !w-9 !h-9 !text-base" aria-label="Fechar carrinho">✕</button>
+    </div>
+    <div class="px-5 pt-4">
+      <p id="shipMsg" class="text-sm font-bold" style="color:#57534e"></p>
+      <div class="barra-frete mt-2"><div id="shipBar" style="width:0%"></div></div>
+    </div>
+    <div id="cartItems" class="flex-1 overflow-y-auto p-5 flex flex-col gap-3"></div>
+    <div class="p-5 border-t-2 space-y-2" style="border-color:#f3e7d7;background:#fff">
+      <div class="flex gap-2">
+        <input id="couponInput" class="campo !py-2 text-sm uppercase" placeholder="Cupom (ex.: BEMVINDO10)" aria-label="Cupom de desconto">
+        <button id="couponBtn" class="btn btn-contorno !py-2 !px-4 text-sm whitespace-nowrap">Aplicar</button>
+      </div>
+      <p id="couponMsg" class="text-xs font-extrabold"></p>
+      <div class="flex justify-between text-sm font-bold" style="color:#78716c"><span>Subtotal</span><span id="subtotalVal">R$ 0,00</span></div>
+      <div id="discountRow" class="justify-between text-sm font-bold" style="color:#0f766e;display:none"><span>Desconto (10%)</span><span id="discountVal">−R$ 0,00</span></div>
+      <div class="flex justify-between text-sm font-bold" style="color:#78716c"><span>Frete</span><span id="shippingVal">—</span></div>
+      <div class="flex justify-between items-center pt-1"><span class="font-display font-bold text-lg">Total</span><span id="totalVal" class="font-display font-extrabold text-2xl" style="color:#ea580c">R$ 0,00</span></div>
+      <button id="checkoutBtn" class="btn btn-caramelo w-full">Finalizar compra</button>
+      <button id="continueBtn" class="w-full text-center text-sm font-extrabold py-1" style="color:#0f766e">continuar comprando</button>
+    </div>
+  </aside>
+
+  <!-- Checkout -->
+  <div id="checkoutModal" class="modal" role="dialog" aria-modal="true" aria-label="Finalizar compra">
+    <div class="modal-caixa p-6 sm:p-8">
+      <div id="coStepForm">
+        <div class="flex items-center justify-between">
+          <h3 class="font-display font-extrabold text-2xl">Finalizar compra</h3>
+          <button id="closeCheckout" class="qtd-btn !w-9 !h-9" aria-label="Fechar checkout">✕</button>
+        </div>
+        <div id="coSummary" class="card !bg-white p-4 mt-4 space-y-1.5"></div>
+        <form id="checkoutForm" class="mt-5 grid sm:grid-cols-2 gap-4" novalidate>
+          <div><label class="rotulo" for="coName">Nome completo *</label><input class="campo" id="coName" type="text" placeholder="Seu nome" autocomplete="name"></div>
+          <div><label class="rotulo" for="coEmail">E-mail *</label><input class="campo" id="coEmail" type="email" placeholder="voce@email.com" autocomplete="email"></div>
+          <div><label class="rotulo" for="coPhone">WhatsApp *</label><input class="campo" id="coPhone" type="tel" placeholder="(11) 98765-4321" inputmode="numeric" autocomplete="tel"></div>
+          <div><label class="rotulo" for="coCep">CEP *</label><input class="campo" id="coCep" type="text" placeholder="05428-010" inputmode="numeric" required></div>
+          <div class="sm:col-span-2"><label class="rotulo" for="coAddress">Endereço *</label><input class="campo" id="coAddress" type="text" placeholder="Rua, número e complemento" required autocomplete="street-address"></div>
+          <div class="sm:col-span-2">
+            <span class="rotulo">Pagamento</span>
+            <div class="flex flex-wrap gap-2">
+              <label class="opcao-check verde"><input type="radio" name="pay" value="Pix" checked><span>Pix</span></label>
+              <label class="opcao-check verde"><input type="radio" name="pay" value="credito"><span>Crédito</span></label>
+              <label class="opcao-check verde"><input type="radio" name="pay" value="debito"><span>Débito</span></label>
+            </div>
+            <p class="text-xs font-bold mt-2" style="color:#a8a29e">Você receberá o link de pagamento por e-mail e WhatsApp após confirmar o pedido.</p>
+          </div>
+          <button type="submit" class="btn btn-petroleo w-full sm:col-span-2 text-lg">Confirmar pedido</button>
+        </form>
+      </div>
+      <div id="coStepSuccess" class="hidden text-center py-4">
+        <div class="mx-auto flex items-center justify-center" style="width:5.5rem;height:5.5rem;border-radius:999px;background:#ecfdf5">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <h3 class="font-display font-extrabold text-3xl mt-4">Pedido confirmado!</h3>
+        <p class="font-bold mt-2" style="color:#57534e">Obrigado, <span id="osName">—</span>! Seu pedido <span id="osNumber" class="font-extrabold" style="color:#0f766e">—</span> no valor de <span id="osTotal" class="font-extrabold">—</span> foi registrado.</p>
+        <p class="text-sm font-bold mt-1" style="color:#a8a29e">Enviamos os detalhes e o link de pagamento para o seu e-mail e WhatsApp.</p>
+        <button id="successClose" class="btn btn-caramelo mt-6">Voltar à loja</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sucesso do agendamento -->
+  <div id="bookingModal" class="modal" role="dialog" aria-modal="true" aria-label="Agendamento confirmado">
+    <div class="modal-caixa p-6 sm:p-8 text-center">
+      <div class="mx-auto flex items-center justify-center" style="width:5.5rem;height:5.5rem;border-radius:999px;background:#ecfdf5">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <h3 class="font-display font-extrabold text-3xl mt-4">Agendamento confirmado!</h3>
+      <p class="font-bold mt-1" style="color:#57534e">Anote seu protocolo e chegue com 10 minutinhos de antecedência.</p>
+      <div id="bmDetails" class="mt-4"></div>
+      <div class="flex flex-col sm:flex-row gap-3 mt-5">
+        <a id="bmWhatsapp" href="#" target="_blank" rel="noopener" class="btn flex-1 text-white" style="background:#25d366">Confirmar no WhatsApp</a>
+        <button id="bmClose" class="btn btn-contorno flex-1">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toasts -->
+  <div id="toastWrap" style="bottom:5.5rem" aria-live="polite"></div>
+
+  <script src="js/app.js" defer></script>
+</body>
+</html>
