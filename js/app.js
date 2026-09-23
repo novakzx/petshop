@@ -25,49 +25,49 @@ const SERVICOS = [
     id: "banho", nome: "Banho Completo", preco: 59.9, duracao: "60 min",
     porPorte: true, icone: "banho",
     desc: "Banho com shampoo premium, condicionador, secagem, perfume e laço ou gravata.",
-    cor: "linear-gradient(135deg,#38bdf8,#0284c7)",
+    cor: "#0284c7",
   },
   {
     id: "tosa-hig", nome: "Tosa Higiênica", preco: 45, duracao: "40 min",
     porPorte: false, icone: "tesoura",
     desc: "Aparos em patas, barriga, bumbum e ouvidos. Ideal entre as tosas completas.",
-    cor: "linear-gradient(135deg,#2dd4bf,#0f766e)",
+    cor: "#0f766e",
   },
   {
     id: "tosa-tesoura", nome: "Tosa na Tesoura", preco: 89.9, duracao: "90 min",
     porPorte: true, icone: "tesoura", destaque: "Mais procurada",
     desc: "Acabamento artesanal na tesoura, com banho incluso e finalização de boutique.",
-    cor: "linear-gradient(135deg,#fb923c,#ea580c)",
+    cor: "#ea580c",
   },
   {
     id: "tosa-maquina", nome: "Tosa na Máquina", preco: 79.9, duracao: "75 min",
     porPorte: true, icone: "maquina",
     desc: "Pelagem uniforme e fresquinha, com banho incluso. Perfeita para o verão.",
-    cor: "linear-gradient(135deg,#a78bfa,#7c3aed)",
+    cor: "#7c3aed",
   },
   {
     id: "spa", nome: "Spa & Hidratação", preco: 69.9, duracao: "50 min",
     porPorte: true, icone: "spa",
     desc: "Hidratação profunda, massagem relaxante, banho de brilho e aromaterapia.",
-    cor: "linear-gradient(135deg,#fb7185,#e11d48)",
+    cor: "#e11d48",
   },
   {
     id: "unhas", nome: "Corte de Unhas", preco: 25, duracao: "20 min",
     porPorte: false, icone: "pata",
     desc: "Corte seguro com lixamento, sem estresse e com petisco de recompensa.",
-    cor: "linear-gradient(135deg,#fbbf24,#d97706)",
+    cor: "#d97706",
   },
   {
     id: "dentes", nome: "Escovação Dentária", preco: 35, duracao: "25 min",
     porPorte: false, icone: "dente",
     desc: "Higiene bucal com produtos veterinários e hálito fresquinho na hora.",
-    cor: "linear-gradient(135deg,#34d399,#059669)",
+    cor: "#059669",
   },
   {
     id: "daycare", nome: "Day Care (diária)", preco: 49.9, duracao: "o dia todo",
     porPorte: false, icone: "sol",
     desc: "Um dia inteiro de brincadeiras, socialização e soneca monitorada.",
-    cor: "linear-gradient(135deg,#f472b6,#db2777)",
+    cor: "#db2777",
   },
 ];
 
@@ -158,7 +158,7 @@ function estrelasHTML(nota) {
   return `<span class="estrelas" aria-label="${nota} de 5 estrelas">${s}</span>`;
 }
 
-/* ---------------- Cabeçalho / menu / reveal ---------------- */
+/* ---------------- Cabeçalho / menu / ---------------- */
 
 function initHeader() {
   const header = $("#siteHeader");
@@ -179,25 +179,6 @@ function initHeader() {
       btn.setAttribute("aria-expanded", "false");
     })
   );
-}
-
-function initReveal() {
-  const els = $$(".reveal");
-  if (!("IntersectionObserver" in window)) {
-    els.forEach((e) => e.classList.add("in"));
-    return;
-  }
-  const io = new IntersectionObserver(
-    (entries) =>
-      entries.forEach((e) => {
-        if (e.isIntersecting) {
-          e.target.classList.add("in");
-          io.unobserve(e.target);
-        }
-      }),
-    { threshold: 0.12 }
-  );
-  els.forEach((e) => io.observe(e));
 }
 
 function initContadores() {
@@ -235,7 +216,7 @@ function renderServicos() {
   if (!grid) return;
   grid.innerHTML = SERVICOS.map(
     (s) => `
-    <article class="card card-servico p-6 flex flex-col gap-3 reveal in">
+    <article class="card card-servico p-6 flex flex-col gap-3">
       <div class="flex items-start justify-between gap-3">
         <div class="icone-servico" style="background:${s.cor}">${ICONES[s.icone]}</div>
         ${s.destaque ? `<span class="selo selo-top">${s.destaque}</span>` : ""}
@@ -470,7 +451,7 @@ function renderMeusAgendamentos() {
     .map(
       (b) => `
       <div class="card p-4 flex items-center gap-3">
-        <div class="icone-servico !w-11 !h-11 !rounded-xl" style="background:linear-gradient(135deg,#2dd4bf,#0f766e)">
+        <div class="icone-servico !w-11 !h-11 !rounded-xl" style="background:#0f766e">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
         </div>
         <div class="flex-1 min-w-0">
@@ -967,7 +948,6 @@ function initDiversos() {
 
 document.addEventListener("DOMContentLoaded", () => {
   initHeader();
-  initReveal();
   initContadores();
   renderServicos();
   initAgendamento();
